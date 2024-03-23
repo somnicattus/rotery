@@ -20,26 +20,27 @@ import * as Rt from 'rotery'; // tree-shaking supported!
 
 ```ts
 import * as Rt from 'rotery';
-import { db } from './some-asynchronous-module.js';
+import { dataAccess } from './some-asynchronous-data-access.js';
 
 const result = await Rt.pipe(
     userIds,
-    Rt.withConcurrency.async(
-        100,
-        Rt.map.async(async ids => await db.findUsersByIds(ids)),
-    ),
+    // Process each unit of 100 ids in parallel.
+    Rt.chunk.sync(100),
+    Rt.map.async(async ids => await dataAccess.findUsersByIds(ids)),
     Rt.flatten.async,
-    // Finds the first met user, then abort the rest upstream iterations.
-    Rt.find.async(user => user.age > 20),
+    Rt.filter.async(user => user.age >= 20),
+    // Find first 10 matched items, then abort rest iterative process.
+    Rt.take.async(10),
+    Rt.accumulate.async,
 );
 ```
 
 ## Features
 
 -   Utility functions (including `map`, `filter`, `reduce`) for `Iterator`s and `AsyncIterator`s.
--   Explicit lazy evaluation by iterator features.
+-   Explicit lazy evaluation by JavaScript iterator feature.
 -   Type safe function currying and type safe function composition.
--   Controlled parallel and serial asynchronous processes, even with specified concurrency.
+-   Controllable asynchronous iterative processes in both parallel and serial, even with specified concurrency.
 
 ## Want more general utility functions?
 
@@ -58,7 +59,12 @@ import { Transform } from 'node:stream';
 import { pipeline } from 'node:stream/promises';
 import * as Rt from 'rotery';
 
-const findDataFromDb = Transform.from(Rt.map.async(async ids => await db.find(id)));
+const findDataFromDb = Transform.from(
+    Rt.compose(
+        Rt.map.async(async id => await db.find(id)),
+        Rt.filter.async(data => data.value >= 20),
+    ),
+);
 
 await pipeline(incomingIdStream, findDataFromDb, outgoingDataStream);
 ```
