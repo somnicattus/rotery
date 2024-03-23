@@ -1,0 +1,104 @@
+{
+    "name": "rotery",
+    "version": "0.1.0",
+    "description": "A type safe utility library for handling iterative and asynchronous processes within functional programming style.",
+    "keywords": [
+        "utilities",
+        "functional",
+        "iteration",
+        "asynchronous",
+        "typescript",
+        "util",
+        "utils",
+        "fp",
+        "iterator",
+        "async iterator",
+        "async",
+        "ts",
+        "type safe",
+        "curry",
+        "pipe",
+        "compose",
+        "lazy evaluation",
+        "serial",
+        "parallel",
+        "concurrency",
+        "iterator helpers",
+        "async iterator helpers",
+        "stream"
+    ],
+    "license": "MIT",
+    "author": {
+        "name": "somnicattus",
+        "email": "somnicattus@gmail.com",
+        "url": "https://github.com/somnicattus"
+    },
+    "repository": {
+        "type": "git",
+        "url": ""
+    },
+    "sideEffects": false,
+    "type": "module",
+    "exports": {
+        "default": "./dist/esm/index.js",
+        "import": "./dist/esm/index/js",
+        "require": "./dist/cjs/index.js",
+        "types": "./dist/types/index.d.ts"
+    },
+    "main": "dist/cjs/index.js",
+    "module": "dist/esm/index.js",
+    "jsnext:main": "dist/esm/index.js",
+    "types": "dist/types/index.d.ts",
+    "files": [
+        "dist/*",
+        "src/*",
+        "!**/*.spec.ts",
+        "!**/*.bench.ts",
+        "!src/__test__/**/*"
+    ],
+    "engines": {
+        "node": ">=10.24.1"
+    },
+    "scripts": {
+        "dev": "tsx src/index.ts",
+        "dev:watch": "tsx watch src/index.ts",
+        "start": "node dist",
+        "build": "pnpm run clean && pnpm run \"/build:.*/\"",
+        "build:esm": "tsc --project tsconfig.esm.json",
+        "build:cjs": "tsc --project tsconfig.cjs.json",
+        "build:types": "tsc --project tsconfig.types.json",
+        "clean": "rm -r dist | true",
+        "test": "vitest run",
+        "test:watch": "vitest watch",
+        "bench": "vitest bench --run",
+        "bench:watch": "vitest bench --watch",
+        "lint": "prettier --write . && eslint --fix .",
+        "lint:check": "prettier --check . && eslint .",
+        "prepare": "husky"
+    },
+    "devDependencies": {
+        "@vitest/coverage-v8": "^1.4.0",
+        "@vitest/ui": "^1.4.0",
+        "eslint": "^8.57.0",
+        "eslint-config-prettier": "^9.1.0",
+        "eslint-plugin-import": "^2.29.1",
+        "eslint-plugin-n": "^16.6.2",
+        "eslint-plugin-promise": "^6.1.1",
+        "eslint-plugin-simple-import-sort": "^12.0.0",
+        "eslint-plugin-sonarjs": "^0.24.0",
+        "eslint-plugin-unicorn": "^51.0.1",
+        "eslint-plugin-unused-imports": "^3.1.0",
+        "eslint-plugin-vitest": "^0.3.26",
+        "husky": "^9.0.11",
+        "lint-staged": "^15.2.2",
+        "prettier": "^3.2.5",
+        "tsx": "^4.7.1",
+        "typescript": "^5.4.3",
+        "typescript-eslint": "^7.3.1",
+        "vitest": "^1.4.0"
+    },
+    "volta": {
+        "node": "20.11.1"
+    },
+    "packageManager": "pnpm@8.15.5"
+}

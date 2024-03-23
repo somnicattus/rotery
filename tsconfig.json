@@ -1,0 +1,35 @@
+/* Visit https://aka.ms/tsconfig to read more about this file */
+{
+    "compilerOptions": {
+        /* Language and Environment */
+
+        // async generators and for-await-of loops have been available since:
+        "target": "ES2018",
+        "lib": ["ES2018"],
+        "types": ["vitest/globals"],
+
+        /* Modules */
+        "module": "NodeNext",
+        "moduleResolution": "NodeNext",
+
+        /* Emit */
+        "noEmit": true,
+
+        /* Type Checking */
+        "strict": true,
+        "allowUnreachableCode": false,
+        "allowUnusedLabels": false,
+        "exactOptionalPropertyTypes": true,
+        "noFallthroughCasesInSwitch": true,
+        "noImplicitOverride": true,
+        "noImplicitReturns": true,
+        "noPropertyAccessFromIndexSignature": true,
+        "noUncheckedIndexedAccess": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+
+        /* Completeness */
+        "skipLibCheck": true
+    },
+    "include": ["src", "*.config.ts"]
+}

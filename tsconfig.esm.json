@@ -1,0 +1,11 @@
+{
+    "extends": "./tsconfig.build.json",
+    "compilerOptions": {
+        "module": "ES6",
+        "moduleResolution": "Node10",
+
+        "sourceMap": true,
+        "removeComments": true,
+        "outDir": "dist/esm"
+    }
+}
