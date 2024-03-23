@@ -28,7 +28,7 @@ const result = await Rt.pipe(
         100,
         Rt.map.async(async ids => await db.findUsersByIds(ids)),
     ),
-    Rt.flatten,
+    Rt.flatten.async,
     // Finds the first met user, then abort the rest upstream iterations.
     Rt.find.async(user => user.age > 20),
 );
