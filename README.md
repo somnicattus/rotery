@@ -22,20 +22,16 @@ import * as Rt from 'rotery'; // tree-shaking supported!
 import * as Rt from 'rotery';
 import { db } from './some-asynchronous-module.js';
 
-const userNames = ['john', 'marry', 'samara', 'paula', 'bill'];
-
 const result = await Rt.pipe(
-    userNames,
+    userIds,
     Rt.withConcurrency.async(
-        2,
-        // As a result, db access will be performed only once.
-        Rt.map.async(async names => await db.findUsersByNames(names)),
+        100,
+        Rt.map.async(async ids => await db.findUsersByIds(ids)),
     ),
     Rt.flatten,
     // Finds the first met user, then abort the rest upstream iterations.
     Rt.find.async(user => user.age > 20),
 );
-// This will find `{ name: 'marry', age: 22, gender: 'f' }`
 ```
 
 ## Features
