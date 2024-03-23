@@ -1,6 +1,6 @@
 {
     "env": {
-        "es2022": true
+        "es2018": true
     },
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
@@ -10,7 +10,6 @@
     },
     "plugins": ["@typescript-eslint", "sonarjs", "unicorn", "simple-import-sort", "unused-imports"],
     "extends": [
-        "eslint:recommended",
         "plugin:@typescript-eslint/strict-type-checked",
         "plugin:@typescript-eslint/stylistic-type-checked",
         "plugin:sonarjs/recommended",
@@ -36,8 +35,6 @@
         // Custom Rules
         // Disable
         "@typescript-eslint/no-namespace": "off",
-        "unicorn/no-nested-ternary": "off",
-        "unicorn/no-array-for-each": "off",
         "unicorn/prevent-abbreviations": [
             "error",
             {
