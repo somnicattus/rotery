@@ -41,7 +41,7 @@ const result = await Rt.pipe(
 -   Type safe function currying and type safe function composition.
 -   Controlled parallel and serial asynchronous processes, even with specified concurrency.
 
-## Wanna more general utility functions?
+## Want more general utility functions?
 
 Rotery doesn't have utilities for non-iterative processes. For more general utility, [Remeda](https://remedajs.com/) is the first choice you may want.
 
