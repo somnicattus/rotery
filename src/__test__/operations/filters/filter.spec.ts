@@ -1,5 +1,5 @@
-import { testAsyncValues, testSyncValues } from '../../__test__/test-util.js';
-import { awaitAll, filter, pipe } from '../../index.js';
+import { awaitAll, filter, pipe } from '../../../index.js';
+import { testAsyncValues, testSyncValues } from '../../test-util.js';
 const values = [1, 2, 3, 4];
 const operation = (v: number): v is 1 | 3 => v === 1 || v === 3;
 const asyncOperation = async (v: number): Promise<boolean> => await Promise.resolve(operation(v));

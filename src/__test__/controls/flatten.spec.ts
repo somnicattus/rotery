@@ -1,5 +1,5 @@
-import { testAsyncValues, testSyncValues } from '../__test__/test-util.js';
-import { awaitAll, flatten } from '../index.js';
+import { awaitAll, flatten } from '../../index.js';
+import { testAsyncValues, testSyncValues } from '../test-util.js';
 const values1 = [
     [1, 2, 3],
     [4, 5, 6],

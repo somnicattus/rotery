@@ -1,22 +1,22 @@
-import { testAsyncValues, testSyncValues } from '../../__test__/test-util.js';
-import { awaitAll, map, pipe } from '../../index.js';
+import { awaitAll, flatMap, pipe } from '../../../index.js';
+import { testAsyncValues, testSyncValues } from '../../test-util.js';
 const values = [1, 2];
-const operation = (v: number): number => v * 2;
-const asyncOperation = async (v: number): Promise<number> => await Promise.resolve(operation(v));
-const expectation = [2, 4];
-describe('map', () => {
+const operation = (v: number): number[] => [v * 2, v * 3];
+const asyncOperation = async (v: number): Promise<number[]> => await Promise.resolve(operation(v));
+const expectation = [2, 3, 4, 6];
+describe('flatMap', () => {
     describe('sync', () => {
-        it.each(testSyncValues(values))('should map $type into iterator.', ({ data }) => {
-            const result = map.sync(data, operation);
+        it.each(testSyncValues(values))('should flatMap $type into iterator.', ({ data }) => {
+            const result = flatMap.sync(data, operation);
 
             expect(result.next.bind(result)).toBeTypeOf('function');
             expect(result[Symbol.iterator]).toBeTypeOf('function');
             expect([...result]).toStrictEqual(expectation);
         });
         it.each(testSyncValues(values))(
-            'should map $type into iterator through pipe.',
+            'should flatMap $type into iterator through pipe.',
             ({ data }) => {
-                const result = pipe(data, map.sync(operation));
+                const result = pipe(data, flatMap.sync(operation));
 
                 expect(result.next.bind(result)).toBeTypeOf('function');
                 expect(result[Symbol.iterator]).toBeTypeOf('function');
@@ -27,9 +27,9 @@ describe('map', () => {
 
     describe('async', () => {
         it.each(testAsyncValues(values))(
-            'should map $type into async iterator.',
+            'should flatMap $type into async iterator.',
             async ({ data }) => {
-                const result = map.async(data, operation);
+                const result = flatMap.async(data, operation);
 
                 expect(result.next.bind(result)).toBeTypeOf('function');
                 expect(result[Symbol.asyncIterator]).toBeTypeOf('function');
@@ -37,9 +37,9 @@ describe('map', () => {
             },
         );
         it.each(testAsyncValues(values))(
-            'should map $type into async iterator through pipe.',
+            'should flatMap $type into async iterator through pipe.',
             async ({ data }) => {
-                const result = pipe(data, map.async(operation));
+                const result = pipe(data, flatMap.async(operation));
 
                 expect(result.next.bind(result)).toBeTypeOf('function');
                 expect(result[Symbol.asyncIterator]).toBeTypeOf('function');
@@ -47,9 +47,9 @@ describe('map', () => {
             },
         );
         it.each(testAsyncValues(values))(
-            'should map $type into async iterator by async operation.',
+            'should flatMap $type into async iterator by async operation.',
             async ({ data }) => {
-                const result = map.async(data, asyncOperation);
+                const result = flatMap.async(data, asyncOperation);
 
                 expect(result.next.bind(result)).toBeTypeOf('function');
                 expect(result[Symbol.asyncIterator]).toBeTypeOf('function');
@@ -57,9 +57,9 @@ describe('map', () => {
             },
         );
         it.each(testAsyncValues(values))(
-            'should map $type into async iterator through pipe by async operation.',
+            'should flatMap $type into async iterator through pipe by async operation.',
             async ({ data }) => {
-                const result = pipe(data, map.async(asyncOperation));
+                const result = pipe(data, flatMap.async(asyncOperation));
 
                 expect(result.next.bind(result)).toBeTypeOf('function');
                 expect(result[Symbol.asyncIterator]).toBeTypeOf('function');

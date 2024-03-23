@@ -1,5 +1,5 @@
-import { testAsyncValues, testSyncValues } from '../../__test__/test-util.js';
-import { awaitAll, unique } from '../../index.js';
+import { awaitAll, unique } from '../../../index.js';
+import { testAsyncValues, testSyncValues } from '../../test-util.js';
 const values = [1, 2, 3, 1, 4, 1, 2];
 const expectation = [1, 2, 3, 4];
 describe('unique', () => {

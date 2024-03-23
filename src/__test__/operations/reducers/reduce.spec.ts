@@ -1,5 +1,5 @@
-import { testAsyncValues, testSyncValues } from '../../__test__/test-util.js';
-import { pipe, reduce } from '../../index.js';
+import { pipe, reduce } from '../../../index.js';
+import { testAsyncValues, testSyncValues } from '../../test-util.js';
 const values = [1, 2, 3];
 const reducer = (accumulator: number, value: number): number => accumulator + value;
 const initialValue = 0;

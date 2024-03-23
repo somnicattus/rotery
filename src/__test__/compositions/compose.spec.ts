@@ -1,4 +1,4 @@
-import { compose } from '../index.js';
+import { compose } from '../../index.js';
 
 describe('compose', () => {
     it('should compose two functions.', () => {

@@ -1,5 +1,5 @@
-import { testAsyncValues, testSyncValues } from '../../__test__/test-util.js';
-import { find, pipe } from '../../index.js';
+import { find, pipe } from '../../../index.js';
+import { testAsyncValues, testSyncValues } from '../../test-util.js';
 const positiveTarget = [1, 2, 3];
 const negativeTarget = [1, 4, 5];
 const test = (value: number): value is 2 => value === 2;

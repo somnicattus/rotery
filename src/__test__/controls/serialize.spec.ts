@@ -1,5 +1,5 @@
-import { testAsyncValues, testSyncValues } from '../__test__/test-util.js';
-import { awaitAll, serialize } from '../index.js';
+import { awaitAll, serialize } from '../../index.js';
+import { testAsyncValues, testSyncValues } from '../test-util.js';
 const values = [1, 2, 3];
 const expectation = values;
 describe('serialize', () => {

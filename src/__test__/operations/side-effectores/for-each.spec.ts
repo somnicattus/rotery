@@ -1,5 +1,5 @@
-import { testAsyncValues, testSyncValues } from '../../__test__/test-util.js';
-import { forEach, pipe } from '../../index.js';
+import { forEach, pipe } from '../../../index.js';
+import { testAsyncValues, testSyncValues } from '../../test-util.js';
 const values = [1, 2, 3];
 const action = (value: number): void => {
     result.push(value * 2);

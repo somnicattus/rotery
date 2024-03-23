@@ -1,4 +1,4 @@
-import { purry } from '../index.js';
+import { purry } from '../../index.js';
 
 const fn = (x: number, y: number, z: number): [number, number, number] => [x, y, z];
 describe('purry', () => {

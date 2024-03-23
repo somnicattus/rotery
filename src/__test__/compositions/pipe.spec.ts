@@ -1,4 +1,4 @@
-import { pipe } from './pipe.js';
+import { pipe } from '../../compositions/pipe.js';
 
 describe('pipe', () => {
     it('should pipe into two functions.', () => {

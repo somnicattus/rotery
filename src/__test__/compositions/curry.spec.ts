@@ -1,4 +1,4 @@
-import { curry } from '../index.js';
+import { curry } from '../../index.js';
 
 const fn = (x: number, y: number, z: number): [number, number, number] => [x, y, z];
 const expectation = [1, 2, 3];

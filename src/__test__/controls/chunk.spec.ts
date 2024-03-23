@@ -1,5 +1,5 @@
-import { testAsyncValues, testSyncValues } from '../__test__/test-util.js';
-import { awaitAll, chunk, pipe } from '../index.js';
+import { awaitAll, chunk, pipe } from '../../index.js';
+import { testAsyncValues, testSyncValues } from '../test-util.js';
 const size = 3;
 const values1 = [1, 2, 3, 4, 5, 6];
 const values2 = [1, 2, 3, 4, 5, 6, 7];
