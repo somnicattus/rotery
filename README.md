@@ -1,6 +1,6 @@
 # Rotery
 
-A type safe utility library for handling iterative and asynchronous processes within functional programming style.
+A utility library for iterative processes, with asynchronous support, type safety, and functional programming style.
 
 ## Installation
 
