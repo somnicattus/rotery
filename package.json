@@ -75,22 +75,22 @@
         "prepare": "husky"
     },
     "devDependencies": {
-        "@vitest/coverage-v8": "^1.4.0",
-        "@vitest/ui": "^1.4.0",
+        "@vitest/coverage-v8": "^2.0.5",
+        "@vitest/ui": "^2.0.5",
         "eslint": "^8.57.0",
         "eslint-config-prettier": "^9.1.0",
-        "eslint-plugin-simple-import-sort": "^12.0.0",
-        "eslint-plugin-sonarjs": "^0.24.0",
-        "eslint-plugin-unicorn": "^51.0.1",
-        "eslint-plugin-unused-imports": "^3.1.0",
-        "eslint-plugin-vitest": "^0.3.26",
-        "husky": "^9.0.11",
-        "lint-staged": "^15.2.2",
-        "prettier": "^3.2.5",
-        "tsx": "^4.7.1",
-        "typescript": "^5.4.3",
-        "typescript-eslint": "^7.3.1",
-        "vitest": "^1.4.0"
+        "eslint-plugin-simple-import-sort": "^12.1.1",
+        "eslint-plugin-sonarjs": "^1.0.4",
+        "eslint-plugin-unicorn": "^55.0.0",
+        "eslint-plugin-unused-imports": "^3.2.0",
+        "eslint-plugin-vitest": "^0.5.4",
+        "husky": "^9.1.4",
+        "lint-staged": "^15.2.8",
+        "prettier": "^3.3.3",
+        "tsx": "^4.16.5",
+        "typescript": "^5.5.4",
+        "typescript-eslint": "^8.0.0",
+        "vitest": "^2.0.5"
     },
     "volta": {
         "node": "20.11.1"

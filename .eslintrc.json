@@ -12,7 +12,7 @@
     "extends": [
         "plugin:@typescript-eslint/strict-type-checked",
         "plugin:@typescript-eslint/stylistic-type-checked",
-        "plugin:sonarjs/recommended",
+        "plugin:sonarjs/recommended-legacy",
         "plugin:unicorn/recommended",
         "prettier"
     ],
@@ -50,7 +50,7 @@
         {
             "files": "**/*.spec.ts",
             "plugins": ["vitest"],
-            "extends": ["plugin:vitest/recommended"],
+            "extends": ["plugin:vitest/legacy-recommended"],
             "rules": {
                 // Disable
                 "sonarjs/no-duplicate-string": "off"
