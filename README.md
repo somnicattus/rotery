@@ -64,7 +64,7 @@ const responses = await Rt.pipe(
         return await response.json();
     }),
     Rt.throttle(5), // This maintains up to 5 concurrent HTTP fetch requests.
-    Rt.toArray.async(), // The results are ordered by the completion time.
+    Rt.accumulate.async, // The results are ordered by the completion time.
 );
 ```
 
