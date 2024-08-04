@@ -5,7 +5,7 @@
 
         // async generators and for-await-of loops have been available since:
         "target": "ES2018",
-        "lib": ["ES2018"],
+        "lib": ["ES2018", "DOM"],
         "types": ["vitest/globals"],
 
         /* Modules */
