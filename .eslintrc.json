@@ -35,6 +35,10 @@
         // Custom Rules
         // Disable
         "@typescript-eslint/no-namespace": "off",
+        "@typescript-eslint/no-unnecessary-condition": [
+            "error",
+            { "allowConstantLoopConditions": true }
+        ],
         "unicorn/prevent-abbreviations": [
             "error",
             {
