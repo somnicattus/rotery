@@ -13,7 +13,10 @@ function _withConcurrency<I, O>(
     return pipe(input, chunk.async(concurrency), map.async(operation));
 }
 
-/** Applies the specified operation to each chunk. */
+/**
+ * Applies the specified operation to each chunk.
+ * @deprecated use `input => map.async(chunk.async(input, concurrency), operation))` instead.
+ */
 export function withConcurrency<I, O>(
     ...args: Parameters<typeof _withConcurrency<I, O>>
 ): ReturnType<typeof _withConcurrency<I, O>>;

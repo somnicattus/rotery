@@ -17,7 +17,10 @@ function _concurrentMap<I, O>(
     );
 }
 
-/** Maps each element by the specified asynchronous mapper with the specified concurrency.  */
+/**
+ * Maps each element by the specified asynchronous mapper with the specified concurrency.
+ * @deprecated use `input => flatMap.async(chunk.async(input, concurrency), map.sync(mapper)))` instead.
+ */
 export function concurrentMap<I, O>(
     ...args: Parameters<typeof _concurrentMap<I, O>>
 ): ReturnType<typeof _concurrentMap<I, O>>;
