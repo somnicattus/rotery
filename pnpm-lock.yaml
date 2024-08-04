@@ -41,6 +41,9 @@ devDependencies:
   prettier:
     specifier: ^3.3.3
     version: 3.3.3
+  remeda:
+    specifier: ^2.7.0
+    version: 2.7.0
   tsx:
     specifier: ^4.16.5
     version: 4.16.5
@@ -2244,6 +2247,12 @@ packages:
       jsesc: 0.5.0
     dev: true
 
+  /remeda@2.7.0:
+    resolution: {integrity: sha512-7q7Xthw/C6uZBk8W5BfXpp/8IjaP51IPUrBVRfSZ3GB9dZMZJEAwYmVxA+TptDmhwlGRw8jUqoo4hL5zU0aV5Q==}
+    dependencies:
+      type-fest: 4.23.0
+    dev: true
+
   /resolve-from@4.0.0:
     resolution: {integrity: sha512-pb/MYmXstAkysRFx8piNI1tGFNQIFA3vkE3Gq4EuA1dF6gHp/+vgZqsCGJapvy8N3Q+4o7FwvquPJcnZ7RYy4g==}
     engines: {node: '>=4'}
@@ -2587,6 +2596,11 @@ packages:
   /type-fest@0.8.1:
     resolution: {integrity: sha512-4dbzIzqvjtgiM5rw1k5rEHtBANKmdudhGyBEajN01fEyhaAIhsoKNy6y7+IN93IfpFtwY9iqi7kD+xwKhQsNJA==}
     engines: {node: '>=8'}
+    dev: true
+
+  /type-fest@4.23.0:
+    resolution: {integrity: sha512-ZiBujro2ohr5+Z/hZWHESLz3g08BBdrdLMieYFULJO+tWc437sn8kQsWLJoZErY8alNhxre9K4p3GURAG11n+w==}
+    engines: {node: '>=16'}
     dev: true
 
   /typescript-eslint@8.0.0(eslint@8.57.0)(typescript@5.5.4):
