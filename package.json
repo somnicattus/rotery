@@ -1,6 +1,6 @@
 {
     "name": "rotery",
-    "version": "0.2.1",
+    "version": "0.3.0",
     "description": "A utility library for iterative processes, with asynchronous support, type safety, and functional programming style.",
     "keywords": [
         "utilities",
