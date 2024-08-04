@@ -23,6 +23,7 @@
         "serial",
         "parallel",
         "concurrency",
+        "throttle",
         "iterator helpers",
         "async iterator helpers",
         "stream"

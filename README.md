@@ -50,6 +50,24 @@ Rotery is greatly inspired by Remeda's features: overridden "data-first" and "da
 
 You can smoothly use Remeda with Rotery combined, because Rotery has compatible pipelining system with Remeda!
 
+## Throttling (concurrent async processes)
+
+`throttle` allows asynchronous processes to be run in a specified level of concurrency.
+
+The results are generated asynchronously in the order of completion, not in the order of input (the first completed result will be emitted first). Please keep in mind that the order of results differs from the order of input.
+
+```ts
+const responses = await Rt.pipe(
+    urls,
+    Rt.map.sync(async url => {
+        const response = await fetch(url);
+        return await response.json();
+    }),
+    Rt.throttle(5), // This maintains up to 5 concurrent HTTP fetch requests.
+    Rt.toArray(), // The results are ordered by the completion time.
+);
+```
+
 ## With Node.js stream
 
 You can create `Transform` stream instances from functions.
