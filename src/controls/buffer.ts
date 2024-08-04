@@ -5,7 +5,7 @@ import { MaybePromise, Series } from './types.js';
 const isNotEmptyElement = (..._args: unknown[]) => true;
 
 async function* _buffer<T>(input: Series<T>, size: number): AsyncGenerator<Awaited<T>> {
-    if (size <= 0 || Number.isInteger(size))
+    if (size <= 0 || !Number.isInteger(size))
         throw new RangeError(`"size" must be a positive integer (got ${size.toString()}).`);
 
     const awaited = await input;
