@@ -2,6 +2,8 @@ import { Curried } from '../compositions/curry.js';
 import { Purried, purry } from '../compositions/purry.js';
 import { MaybePromise, Series } from './types.js';
 
+const isNotEmptyElement = (..._args: unknown[]) => true;
+
 async function* _buffer<T>(input: Series<T>, size: number): AsyncGenerator<Awaited<T>> {
     if (size <= 0) throw new RangeError(`"size" must be positive (got ${size.toString()}).`);
 
@@ -11,75 +13,42 @@ async function* _buffer<T>(input: Series<T>, size: number): AsyncGenerator<Await
         ? awaited.values()
         : awaited;
 
-    const queue: IteratorResult<MaybePromise<T>, unknown>[] = [];
-    let pullingCount = 0;
-    const eventBus = new EventTarget();
-
-    eventBus.addEventListener('pull', (): void => {
+    const pull = async (): Promise<IteratorResult<MaybePromise<T>>> => {
         const next = iterator.next();
-        (next instanceof Promise
+        return await (next instanceof Promise
             ? next
             : // eslint-disable-next-line unicorn/no-unreadable-iife
               (async (): Promise<IteratorResult<Awaited<T>, unknown>> =>
                   ({
                       value: await next.value,
                       done: next.done,
-                  }) as IteratorResult<Awaited<T>, unknown>)()
-        )
-            .then((result: IteratorResult<MaybePromise<T>, unknown>) => {
-                queue.push(result);
-                pullingCount--;
-                eventBus.dispatchEvent(new Event('push'));
-            })
-            .catch((error: unknown) => {
-                eventBus.dispatchEvent(new CustomEvent('error', { detail: error }));
-            });
-    });
-
-    const pull = () => {
-        pullingCount++;
-        eventBus.dispatchEvent(new Event('pull'));
+                  }) as IteratorResult<Awaited<T>, unknown>)());
     };
 
-    for (let index = 0; index < size; index++) pull();
+    const pullers = Array.from({ length: size }, (_, k) =>
+        (async () => {
+            return { k, result: await pull() };
+        })(),
+    );
 
-    const listenError = new Promise((_, reject) => {
-        eventBus.addEventListener(
-            'error',
-            event => {
-                // TODO: bug of eslint?
-                // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-                event instanceof CustomEvent
-                    ? reject(event.detail) // eslint-disable-line @typescript-eslint/prefer-promise-reject-errors
-                    : reject(new TypeError(`"error" event is not ErrorEvent.`));
-            },
-            { once: true },
-        );
-    });
-
-    const listenNextPush = () =>
-        new Promise<false>((resolve: (value: false | PromiseLike<false>) => void) => {
-            eventBus.addEventListener(
-                'push',
-                () => {
-                    resolve(false);
-                },
-                { once: true },
-            );
-        });
-
-    while (true) {
-        const item = queue.shift();
-        if (item == undefined) {
-            if (pullingCount <= 0) break;
-            await Promise.race([listenError, listenNextPush()]);
-        } else {
-            if (item.done) {
-                continue;
-            }
-            yield await item.value;
-            pull();
+    // eslint-disable-next-line unicorn/no-array-callback-reference
+    while (pullers.some(isNotEmptyElement)) {
+        // eslint-disable-next-line unicorn/no-array-callback-reference
+        const item = await Promise.race(pullers.filter(isNotEmptyElement));
+        if (item.result.done) {
+            // eslint-disable-next-line @typescript-eslint/no-array-delete, @typescript-eslint/no-dynamic-delete
+            delete pullers[item.k];
+            continue;
         }
+        yield await item.result.value;
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        pullers.splice(
+            item.k,
+            1,
+            (async () => {
+                return { k: item.k, result: await pull() };
+            })(),
+        );
     }
 }
 

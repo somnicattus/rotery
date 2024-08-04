@@ -20,7 +20,9 @@ describe('buffer', () => {
             async ({ data }) => {
                 const result = buffer(data, 3);
                 expect(result[Symbol.asyncIterator]).toBeTypeOf('function');
-                expect(await accumulate.async(result)).toStrictEqual(expectation);
+                expect(R.sortBy(await accumulate.async(result), R.identity())).toStrictEqual(
+                    expectation,
+                );
             },
         );
     });

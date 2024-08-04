@@ -56,7 +56,7 @@
         "!**/__test__"
     ],
     "engines": {
-        "node": ">=18.7.0 || ^16.17.0"
+        "node": ">=10.24.1"
     },
     "scripts": {
         "dev": "tsx src/index.ts",
@@ -76,6 +76,7 @@
         "prepare": "husky"
     },
     "devDependencies": {
+        "@types/node": "^22.1.0",
         "@vitest/coverage-v8": "^2.0.5",
         "@vitest/ui": "^2.0.5",
         "eslint": "^8.57.0",
