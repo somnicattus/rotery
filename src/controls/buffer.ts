@@ -2,7 +2,7 @@ import { Curried } from '../compositions/curry.js';
 import { Purried, purry } from '../compositions/purry.js';
 import { MaybePromise, Series } from './types.js';
 
-const isNotEmptyElement = (..._args: unknown[]) => true;
+const isNotEmptyElement = () => true;
 
 async function* _buffer<T>(input: Series<T>, size: number): AsyncGenerator<Awaited<T>> {
     if (size <= 0 || !Number.isInteger(size))
@@ -14,23 +14,15 @@ async function* _buffer<T>(input: Series<T>, size: number): AsyncGenerator<Await
         ? awaited.values()
         : awaited;
 
-    const pull = async (): Promise<IteratorResult<MaybePromise<T>>> => {
+    const pull = async () => {
         const next = iterator.next();
-        return await (next instanceof Promise
-            ? next
-            : // eslint-disable-next-line unicorn/no-unreadable-iife
-              (async (): Promise<IteratorResult<Awaited<T>, unknown>> =>
-                  ({
-                      value: await next.value,
-                      done: next.done,
-                  }) as IteratorResult<Awaited<T>, unknown>)());
+        return next instanceof Promise
+            ? await next
+            : // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+              ({ value: await next.value, done: next.done } as IteratorResult<MaybePromise<T>>);
     };
 
-    const pullers = Array.from({ length: size }, (_, k) =>
-        (async () => {
-            return { k, result: await pull() };
-        })(),
-    );
+    const pullers = Array.from({ length: size }, (_, k) => pull().then(result => ({ k, result })));
 
     // eslint-disable-next-line unicorn/no-array-callback-reference
     while (pullers.some(isNotEmptyElement)) {
@@ -46,9 +38,7 @@ async function* _buffer<T>(input: Series<T>, size: number): AsyncGenerator<Await
         pullers.splice(
             item.k,
             1,
-            (async () => {
-                return { k: item.k, result: await pull() };
-            })(),
+            pull().then(result => ({ k: item.k, result })),
         );
     }
 }
@@ -83,7 +73,7 @@ export function buffer<T>(
  *         return await response.json();
  *     }),
  *     Rt.throttle(5), // This maintains up to 5 concurrent HTTP fetch requests.
- *     Rt.toArray(), // The results are ordered by the completion time.
+ *     Rt.accumulate.async, // The results are ordered by the completion time.
  * );
  * ```
  */
