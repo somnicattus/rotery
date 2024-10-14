@@ -43,7 +43,7 @@ async function* _buffer<T>(input: Series<T>, size: number): AsyncGenerator<Await
 /**
  * Buffers specified number of items and generates results in the resolution order.
  *
- * If the input is a synchronous iterator and generates promises, the promises are executed in parallel and throttled.
+ * If the input is a synchronous iterator which generates promises, the promises are executed in parallel and throttled.
  */
 export function buffer<T>(...args: Parameters<typeof _buffer<T>>): ReturnType<typeof _buffer<T>>;
 export function buffer<T>(
