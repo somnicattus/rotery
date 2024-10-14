@@ -1,5 +1,6 @@
 import { type Curried } from '../../compositions/curry.js';
 import { type Purried, purry } from '../../compositions/purry.js';
+import { isIterable } from '../../controls/guards.js';
 import { type Series, type SyncSeries } from '../../controls/types.js';
 
 function* _syncFlatMap<I, O>(
@@ -17,9 +18,32 @@ async function* _asyncFlatMap<I, O>(
     input: Series<I>,
     mapper: (value: Awaited<I>) => Series<O>,
 ): AsyncGenerator<Awaited<O>> {
-    for await (const value of await input) {
-        for await (const output of await mapper(value)) {
-            yield output;
+    const awaited = await input;
+    if (isIterable(awaited)) {
+        for (const value of awaited) {
+            const results = await mapper(await value);
+            if (isIterable(results)) {
+                for (const output of results) {
+                    yield output;
+                }
+            } else {
+                for await (const output of results) {
+                    yield output;
+                }
+            }
+        }
+    } else {
+        for await (const value of awaited) {
+            const results = await mapper(value);
+            if (isIterable(results)) {
+                for (const output of results) {
+                    yield output;
+                }
+            } else {
+                for await (const output of results) {
+                    yield output;
+                }
+            }
         }
     }
 }

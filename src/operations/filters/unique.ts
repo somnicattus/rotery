@@ -1,3 +1,4 @@
+import { isIterable } from '../../controls/guards.js';
 import { type Series, type SyncSeries } from '../../controls/types.js';
 
 /** Creates a series without duplicated elements. */
@@ -14,10 +15,21 @@ export namespace unique {
 
     export async function* async<T>(input: Series<T>): AsyncGenerator<Awaited<T>> {
         const set = new Set<Awaited<T>>();
-        for await (const value of await input) {
-            if (!set.has(value)) {
-                set.add(value);
-                yield value;
+        const awaited = await input;
+        if (isIterable(awaited)) {
+            for (const value of awaited) {
+                const v = await value;
+                if (!set.has(v)) {
+                    set.add(v);
+                    yield v;
+                }
+            }
+        } else {
+            for await (const value of awaited) {
+                if (!set.has(value)) {
+                    set.add(value);
+                    yield value;
+                }
             }
         }
     }

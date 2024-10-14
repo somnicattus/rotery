@@ -1,5 +1,6 @@
 import { type Curried } from '../../compositions/curry.js';
 import { type Purried, purry } from '../../compositions/purry.js';
+import { isIterable } from '../../controls/guards.js';
 import { type Series, type SyncSeries } from '../../controls/types.js';
 
 function* _syncDrop<T>(input: SyncSeries<T>, drop: number): Generator<T> {
@@ -15,12 +16,23 @@ function* _syncDrop<T>(input: SyncSeries<T>, drop: number): Generator<T> {
 
 async function* _asyncDrop<T>(input: Series<T>, drop: number): AsyncGenerator<T> {
     let leftDrop = drop;
-    for await (const value of await input) {
-        if (leftDrop > 0) {
-            leftDrop--;
-            continue;
+    const awaited = await input;
+    if (isIterable(awaited)) {
+        for (const value of awaited) {
+            if (leftDrop > 0) {
+                leftDrop--;
+                continue;
+            }
+            yield value;
         }
-        yield value;
+    } else {
+        for await (const value of awaited) {
+            if (leftDrop > 0) {
+                leftDrop--;
+                continue;
+            }
+            yield value;
+        }
     }
 }
 

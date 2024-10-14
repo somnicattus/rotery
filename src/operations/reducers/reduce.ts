@@ -1,5 +1,6 @@
 import { type Curried } from '../../compositions/curry.js';
 import { type Purried, purry } from '../../compositions/purry.js';
+import { isIterable } from '../../controls/guards.js';
 import { type Series, type SyncSeries } from '../../controls/types.js';
 
 function _syncReduce<T, R>(
@@ -20,9 +21,17 @@ async function _asyncReduce<T, R>(
     initialValue: R | Promise<R>,
 ): Promise<Awaited<R>> {
     let returnValue: Awaited<R> = await initialValue;
-    for await (const value of await input) {
-        returnValue = await reducer(returnValue, value);
+    const awaited = await input;
+    if (isIterable(awaited)) {
+        for (const value of awaited) {
+            returnValue = await reducer(returnValue, await value);
+        }
+    } else {
+        for await (const value of awaited) {
+            returnValue = await reducer(returnValue, value);
+        }
     }
+
     return returnValue;
 }
 

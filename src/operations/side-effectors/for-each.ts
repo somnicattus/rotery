@@ -1,5 +1,6 @@
 import { type Curried } from '../../compositions/curry.js';
 import { type Purried, purry } from '../../compositions/purry.js';
+import { isIterable } from '../../controls/guards.js';
 import { type Series, type SyncSeries } from '../../controls/types.js';
 
 function _syncForEach<T>(input: SyncSeries<T>, action: (value: T) => void): void {
@@ -12,8 +13,15 @@ async function _asyncForEach<T>(
     input: Series<T>,
     action: (value: Awaited<T>) => void | Promise<void>,
 ): Promise<void> {
-    for await (const value of await input) {
-        await action(value);
+    const awaited = await input;
+    if (isIterable(awaited)) {
+        for (const value of awaited) {
+            await action(await value);
+        }
+    } else {
+        for await (const value of awaited) {
+            await action(value);
+        }
     }
 }
 

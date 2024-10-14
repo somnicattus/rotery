@@ -1,5 +1,6 @@
 import { type Curried } from '../compositions/curry.js';
 import { type Purried, purry } from '../compositions/purry.js';
+import { isIterable } from './guards.js';
 import { type Chunked, type Series, type SyncSeries } from './types.js';
 
 function* _syncChunk<T, L extends number>(input: SyncSeries<T>, size: L): Generator<Chunked<T, L>> {
@@ -19,11 +20,22 @@ async function* _asyncChunk<T, L extends number>(
     size: L,
 ): AsyncGenerator<Chunked<Awaited<T>, L>> {
     let accumulator: T[] = [];
-    for await (const value of await input) {
-        accumulator.push(value);
-        if (accumulator.length >= size) {
-            yield accumulator as Chunked<Awaited<T>, L>;
-            accumulator = [];
+    const awaited = await input;
+    if (isIterable(awaited)) {
+        for (const value of awaited) {
+            accumulator.push(await value);
+            if (accumulator.length >= size) {
+                yield accumulator as Chunked<Awaited<T>, L>;
+                accumulator = [];
+            }
+        }
+    } else {
+        for await (const value of awaited) {
+            accumulator.push(value);
+            if (accumulator.length >= size) {
+                yield accumulator as Chunked<Awaited<T>, L>;
+                accumulator = [];
+            }
         }
     }
     if (accumulator.length > 0) yield accumulator as Chunked<Awaited<T>, L>;

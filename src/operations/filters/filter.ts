@@ -1,4 +1,5 @@
 import { type Purried, purry } from '../../compositions/purry.js';
+import { isIterable } from '../../controls/guards.js';
 import { type Series, type SyncSeries } from '../../controls/types.js';
 
 function* _syncFilter<T, S extends T>(
@@ -14,8 +15,15 @@ async function* _asyncFilter<T, S extends Awaited<T>>(
     input: Series<T>,
     test: ((value: Awaited<T>) => value is S) | ((value: Awaited<T>) => Promise<boolean>),
 ): AsyncGenerator<S> {
-    for await (const value of await input) {
-        if (await test(value)) yield value as S;
+    const awaited = await input;
+    if (isIterable(awaited)) {
+        for (const value of awaited) {
+            if (await test(await value)) yield value as S;
+        }
+    } else {
+        for await (const value of awaited) {
+            if (await test(value)) yield value as S;
+        }
     }
 }
 

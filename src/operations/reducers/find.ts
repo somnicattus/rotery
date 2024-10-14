@@ -1,4 +1,5 @@
 import { type Purried, purry } from '../../compositions/purry.js';
+import { isIterable } from '../../controls/guards.js';
 import { type Series, type SyncSeries } from '../../controls/types.js';
 
 function _syncFind<T, S extends T>(
@@ -15,9 +16,17 @@ async function _asyncFind<T, S extends Awaited<T>>(
     input: Series<T>,
     test: ((value: Awaited<T>) => value is S) | ((value: Awaited<T>) => Promise<boolean>),
 ): Promise<S | undefined> {
-    for await (const value of await input) {
-        if (await test(value)) return value as S;
+    const awaited = await input;
+    if (isIterable(awaited)) {
+        for (const value of awaited) {
+            if (await test(await value)) return value as S;
+        }
+    } else {
+        for await (const value of awaited) {
+            if (await test(value)) return value as S;
+        }
     }
+
     return undefined;
 }
 

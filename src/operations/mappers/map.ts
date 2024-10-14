@@ -1,5 +1,6 @@
 import { type Curried } from '../../compositions/curry.js';
 import { type Purried, purry } from '../../compositions/purry.js';
+import { isIterable } from '../../controls/guards.js';
 import { type Series, type SyncSeries } from '../../controls/types.js';
 
 function* _syncMap<I, O>(input: SyncSeries<I>, mapper: (value: I) => O): Generator<O> {
@@ -12,8 +13,15 @@ async function* _asyncMap<I, O>(
     input: Series<I>,
     mapper: (value: Awaited<I>) => O | Promise<O>,
 ): AsyncGenerator<Awaited<O>> {
-    for await (const value of await input) {
-        yield await mapper(value);
+    const awaited = await input;
+    if (isIterable(awaited)) {
+        for (const value of awaited) {
+            yield mapper(await value);
+        }
+    } else {
+        for await (const value of awaited) {
+            yield mapper(value);
+        }
     }
 }
 
