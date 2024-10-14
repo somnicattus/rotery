@@ -1,6 +1,6 @@
 import { Curried } from '../compositions/curry.js';
 import { Purried, purry } from '../compositions/purry.js';
-import { MaybePromise, Series } from './types.js';
+import { Series } from './types.js';
 
 const isNotEmptyElement = () => true;
 
@@ -9,37 +9,34 @@ async function* _buffer<T>(input: Series<T>, size: number): AsyncGenerator<Await
         throw new RangeError(`"size" must be a positive integer (got ${size.toString()}).`);
 
     const awaited = await input;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const iterator = (Array.isArray as (v: unknown) => v is readonly any[])(awaited)
+    const iterator = (Array.isArray as (v: unknown) => v is readonly unknown[])(awaited)
         ? awaited.values()
         : awaited;
 
-    const pull = async () => {
+    const work = async (k: number) => {
         const next = iterator.next();
-        return next instanceof Promise
-            ? await next
-            : // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-              ({ value: await next.value, done: next.done } as IteratorResult<MaybePromise<T>>);
+        const result =
+            next instanceof Promise
+                ? await next
+                : // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                  ({ value: await next.value, done: next.done } as IteratorResult<Awaited<T>>);
+        return { k, result };
     };
 
-    const pullers = Array.from({ length: size }, (_, k) => pull().then(result => ({ k, result })));
+    const workers = Array.from({ length: size }, (_, k) => work(k));
 
     // eslint-disable-next-line unicorn/no-array-callback-reference
-    while (pullers.some(isNotEmptyElement)) {
+    while (workers.some(isNotEmptyElement)) {
         // eslint-disable-next-line unicorn/no-array-callback-reference
-        const item = await Promise.race(pullers.filter(isNotEmptyElement));
+        const item = await Promise.race(workers.filter(isNotEmptyElement));
         if (item.result.done) {
             // eslint-disable-next-line @typescript-eslint/no-array-delete, @typescript-eslint/no-dynamic-delete
-            delete pullers[item.k];
+            delete workers[item.k];
             continue;
         }
-        yield await item.result.value;
+        yield item.result.value;
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        pullers.splice(
-            item.k,
-            1,
-            pull().then(result => ({ k: item.k, result })),
-        );
+        workers.splice(item.k, 1, work(item.k));
     }
 }
 
