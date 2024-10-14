@@ -13,6 +13,7 @@ async function _concurrentForEach<T>(
 ): Promise<void> {
     await pipe(
         input,
+        // eslint-disable-next-line @typescript-eslint/no-deprecated
         withConcurrency(
             concurrency,
             compose(
@@ -27,10 +28,17 @@ async function _concurrentForEach<T>(
     );
 }
 
-/** Performs the specified asynchronous action for each element with the specified concurrency.  */
+/**
+ * Performs the specified asynchronous action for each element with the specified concurrency.
+ * @deprecated use `input => map.async(chunk.async(input, concurrency), forEach,sync(operation)))` instead.
+ */
 export function concurrentForEach<T>(
     ...args: Parameters<typeof _concurrentForEach<T>>
 ): ReturnType<typeof _concurrentForEach<T>>;
+/**
+ * Performs the specified asynchronous action for each element with the specified concurrency.
+ * @deprecated use `input => map.async(chunk.async(input, concurrency), forEach,sync(operation)))` instead.
+ */
 export function concurrentForEach<T>(
     ...args: Parameters<Curried<typeof _concurrentForEach<T>>>
 ): ReturnType<Curried<typeof _concurrentForEach<T>>>;

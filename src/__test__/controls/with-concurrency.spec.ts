@@ -9,6 +9,7 @@ describe('withConcurrency', () => {
     it.each(testAsyncValues(values1))(
         'should apply operation for each chunk from $type.',
         async ({ data }) => {
+            // eslint-disable-next-line @typescript-eslint/no-deprecated
             const result = withConcurrency(data, size, values => values.join(','));
 
             expect(result.next.bind(result)).toBeTypeOf('function');
@@ -21,6 +22,7 @@ describe('withConcurrency', () => {
         async ({ data }) => {
             const result = pipe(
                 data,
+                // eslint-disable-next-line @typescript-eslint/no-deprecated
                 withConcurrency(size, values => values.join(',')),
             );
 
@@ -32,6 +34,7 @@ describe('withConcurrency', () => {
     it.each(testAsyncValues(values1))(
         'should apply async operation for each chunk from $type.',
         async ({ data }) => {
+            // eslint-disable-next-line @typescript-eslint/no-deprecated
             const result = withConcurrency(
                 data,
                 size,
@@ -48,6 +51,7 @@ describe('withConcurrency', () => {
         async ({ data }) => {
             const result = pipe(
                 data,
+                // eslint-disable-next-line @typescript-eslint/no-deprecated
                 withConcurrency(size, async values => await Promise.resolve(values.join(','))),
             );
 

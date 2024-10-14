@@ -20,6 +20,10 @@ function _withConcurrency<I, O>(
 export function withConcurrency<I, O>(
     ...args: Parameters<typeof _withConcurrency<I, O>>
 ): ReturnType<typeof _withConcurrency<I, O>>;
+/**
+ * Applies the specified operation to each chunk.
+ * @deprecated use `input => map.async(chunk.async(input, concurrency), operation))` instead.
+ */
 export function withConcurrency<I, O>(
     ...args: Parameters<Curried<typeof _withConcurrency<I, O>>>
 ): ReturnType<Curried<typeof _withConcurrency<I, O>>>;

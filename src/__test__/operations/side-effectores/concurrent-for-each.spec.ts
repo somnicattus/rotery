@@ -8,6 +8,7 @@ describe('concurrentForEach', () => {
         'should perform action for each values from $type.',
         async ({ data }) => {
             const result: number[] = [];
+            // eslint-disable-next-line @typescript-eslint/no-deprecated
             await concurrentForEach(data, size, async x => {
                 result.push(x);
                 await Promise.resolve();
@@ -22,6 +23,7 @@ describe('concurrentForEach', () => {
             const result: number[] = [];
             await pipe(
                 data,
+                // eslint-disable-next-line @typescript-eslint/no-deprecated
                 concurrentForEach(size, async x => {
                     result.push(x);
                     await Promise.resolve();

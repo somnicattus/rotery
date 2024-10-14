@@ -12,6 +12,7 @@ function _concurrentMap<I, O>(
 ): AsyncGenerator<Awaited<O>> {
     return pipe(
         input,
+        // eslint-disable-next-line @typescript-eslint/no-deprecated
         withConcurrency(concurrency, values => values.map(async value => await mapper(value))),
         flatten.async,
     );
@@ -24,6 +25,10 @@ function _concurrentMap<I, O>(
 export function concurrentMap<I, O>(
     ...args: Parameters<typeof _concurrentMap<I, O>>
 ): ReturnType<typeof _concurrentMap<I, O>>;
+/**
+ * Maps each element by the specified asynchronous mapper with the specified concurrency.
+ * @deprecated use `input => flatMap.async(chunk.async(input, concurrency), map.sync(mapper)))` instead.
+ */
 export function concurrentMap<I, O>(
     ...args: Parameters<Curried<typeof _concurrentMap<I, O>>>
 ): ReturnType<Curried<typeof _concurrentMap<I, O>>>;

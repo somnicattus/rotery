@@ -7,6 +7,7 @@ const expectation1 = [2, 4, 6, 8, 10, 12];
 const expectation2 = [2, 4, 6, 8, 10, 12, 14];
 describe('concurrentMap', () => {
     it.each(testAsyncValues(values1))('should map values from $type.', async ({ data }) => {
+        // eslint-disable-next-line @typescript-eslint/no-deprecated
         const result = concurrentMap(data, size, async x => await Promise.resolve(x * 2));
 
         expect(result.next.bind(result)).toBeTypeOf('function');
@@ -18,6 +19,7 @@ describe('concurrentMap', () => {
         async ({ data }) => {
             const result = pipe(
                 data,
+                // eslint-disable-next-line @typescript-eslint/no-deprecated
                 concurrentMap(size, async x => await Promise.resolve(x * 2)),
             );
 
