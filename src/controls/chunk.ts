@@ -1,7 +1,7 @@
-import { type Curried } from '../compositions/curry.js';
+import type { Curried } from '../compositions/curry.js';
 import { type Purried, purry } from '../compositions/purry.js';
 import { isIterable } from './guards.js';
-import { type Chunked, type Series, type SyncSeries } from './types.js';
+import type { Chunked, Series, SyncSeries } from './types.js';
 
 function* _syncChunk<T, L extends number>(input: SyncSeries<T>, size: L): Generator<Chunked<T, L>> {
     let accumulator: T[] = [];

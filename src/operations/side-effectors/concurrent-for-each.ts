@@ -1,9 +1,9 @@
 import { compose } from '../../compositions/compose.js';
-import { type Curried } from '../../compositions/curry.js';
+import type { Curried } from '../../compositions/curry.js';
 import { pipe } from '../../compositions/pipe.js';
 import { type Purried, purry } from '../../compositions/purry.js';
 import { awaitAll } from '../../controls/accumulate.js';
-import { type Series } from '../../controls/types.js';
+import type { Series } from '../../controls/types.js';
 import { withConcurrency } from '../../controls/with-concurrency.js';
 
 async function _concurrentForEach<T>(
@@ -42,6 +42,7 @@ export function concurrentForEach<T>(
 export function concurrentForEach<T>(
     ...args: Parameters<Curried<typeof _concurrentForEach<T>>>
 ): ReturnType<Curried<typeof _concurrentForEach<T>>>;
+// eslint-disable-next-line @typescript-eslint/promise-function-async
 export function concurrentForEach<T>(
     ...args: Parameters<Purried<typeof _concurrentForEach<T>>>
 ): ReturnType<Purried<typeof _concurrentForEach<T>>> {

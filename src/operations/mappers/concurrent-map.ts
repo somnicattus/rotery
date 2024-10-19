@@ -1,8 +1,8 @@
-import { type Curried } from '../../compositions/curry.js';
+import type { Curried } from '../../compositions/curry.js';
 import { pipe } from '../../compositions/pipe.js';
 import { type Purried, purry } from '../../compositions/purry.js';
 import { flatten } from '../../controls/flatten.js';
-import { type Series } from '../../controls/types.js';
+import type { Series } from '../../controls/types.js';
 import { withConcurrency } from '../../controls/with-concurrency.js';
 
 function _concurrentMap<I, O>(

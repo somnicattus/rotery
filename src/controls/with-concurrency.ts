@@ -1,14 +1,14 @@
-import { type Curried } from '../compositions/curry.js';
+import type { Curried } from '../compositions/curry.js';
 import { pipe } from '../compositions/pipe.js';
 import { type Purried, purry } from '../compositions/purry.js';
 import { map } from '../operations/index.js';
 import { chunk } from './chunk.js';
-import { type Series } from './types.js';
+import type { Series } from './types.js';
 
 function _withConcurrency<I, O>(
     input: Series<I>,
     concurrency: number,
-    operation: (value: Awaited<I>[]) => O,
+    operation: (value: Array<Awaited<I>>) => O,
 ): AsyncGenerator<Awaited<O>> {
     return pipe(input, chunk.async(concurrency), map.async(operation));
 }

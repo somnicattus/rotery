@@ -52,7 +52,7 @@ export function compose<A, B, C, D, E, F, G, H>(
     fn7: (value: G) => H,
 ): (value: A) => H;
 
-export function compose(...functions: readonly ((value: unknown) => unknown)[]): unknown {
+export function compose(...functions: ReadonlyArray<(value: unknown) => unknown>): unknown {
     // @ts-expect-error (ts2556) pipe's type definition is overloaded for users
     return value => pipe(value, ...functions);
 }

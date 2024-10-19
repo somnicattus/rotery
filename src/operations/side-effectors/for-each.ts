@@ -1,7 +1,7 @@
-import { type Curried } from '../../compositions/curry.js';
+import type { Curried } from '../../compositions/curry.js';
 import { type Purried, purry } from '../../compositions/purry.js';
 import { isIterable } from '../../controls/guards.js';
-import { type Series, type SyncSeries } from '../../controls/types.js';
+import type { Series, SyncSeries } from '../../controls/types.js';
 
 function _syncForEach<T>(input: SyncSeries<T>, action: (value: T) => void): void {
     for (const value of input) {
@@ -45,6 +45,7 @@ export namespace forEach {
     export function async<T>(
         ...args: Parameters<Curried<typeof _asyncForEach<T>>>
     ): ReturnType<Curried<typeof _asyncForEach<T>>>;
+    // eslint-disable-next-line @typescript-eslint/promise-function-async
     export function async<T>(
         ...args: Parameters<Purried<typeof _asyncForEach<T>>>
     ): ReturnType<Purried<typeof _asyncForEach<T>>> {

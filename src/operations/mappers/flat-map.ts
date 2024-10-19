@@ -1,7 +1,7 @@
-import { type Curried } from '../../compositions/curry.js';
+import type { Curried } from '../../compositions/curry.js';
 import { type Purried, purry } from '../../compositions/purry.js';
 import { isIterable } from '../../controls/guards.js';
-import { type Series, type SyncSeries } from '../../controls/types.js';
+import type { Series, SyncSeries } from '../../controls/types.js';
 
 function* _syncFlatMap<I, O>(
     input: SyncSeries<I>,
@@ -14,6 +14,7 @@ function* _syncFlatMap<I, O>(
     }
 }
 
+// eslint-disable-next-line sonarjs/cognitive-complexity
 async function* _asyncFlatMap<I, O>(
     input: Series<I>,
     mapper: (value: Awaited<I>) => Series<O>,

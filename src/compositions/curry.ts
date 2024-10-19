@@ -2,7 +2,7 @@ export type Curried<F extends (...args: readonly never[]) => unknown> =
     Parameters<F> extends readonly [infer T, ...infer R extends unknown[]]
         ? (...args: R) => (arg: T) => ReturnType<F>
         : // Allow parameters only with rest parameters
-          Parameters<F> extends (infer T)[]
+          Parameters<F> extends Array<infer T>
           ? (...args: T[]) => (arg: T) => ReturnType<F>
           : never;
 
@@ -51,7 +51,7 @@ export function curry<F extends (...args: readonly never[]) => unknown, N extend
     fn: F,
     nth?: N,
 ): NthCurried<N, F> {
-    const curried = ((...args: never[]) =>
+    const curried = ((...args: readonly never[]) =>
         (a0: never) =>
             fn(a0, ...args)) as Curried<F>;
 

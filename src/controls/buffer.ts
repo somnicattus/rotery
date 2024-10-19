@@ -1,8 +1,8 @@
-import { Curried } from '../compositions/curry.js';
-import { Purried, purry } from '../compositions/purry.js';
-import { Series } from './types.js';
+import type { Curried } from '../compositions/curry.js';
+import { type Purried, purry } from '../compositions/purry.js';
+import type { Series } from './types.js';
 
-const isNotEmptyElement = () => true;
+const isNotEmptyElement = (): true => true;
 
 async function* _buffer<T>(input: Series<T>, size: number): AsyncGenerator<Awaited<T>> {
     if (size <= 0 || !Number.isInteger(size))
@@ -13,24 +13,33 @@ async function* _buffer<T>(input: Series<T>, size: number): AsyncGenerator<Await
         ? awaited.values()
         : awaited;
 
-    const work = async (k: number) => {
+    const work = async (
+        k: number,
+    ): Promise<{
+        k: number;
+        result: IteratorResult<Awaited<T>>;
+    }> => {
         const next = iterator.next();
+        // HACK: ignoring return results
         const result =
             next instanceof Promise
-                ? await next
-                : // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-                  ({ value: await next.value, done: next.done } as IteratorResult<Awaited<T>>);
+                ? ((await next) as IteratorResult<Awaited<T>>)
+                : ({
+                      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                      value: await next.value,
+                      done: next.done,
+                  } as const as IteratorResult<Awaited<T>>);
         return { k, result };
     };
 
-    const workers = Array.from({ length: size }, (_, k) => work(k));
+    const workers = Array.from({ length: size }, async (_, k) => await work(k));
 
-    // eslint-disable-next-line unicorn/no-array-callback-reference
+    // eslint-disable-next-line unicorn/no-array-callback-reference, @typescript-eslint/no-unnecessary-condition
     while (workers.some(isNotEmptyElement)) {
-        // eslint-disable-next-line unicorn/no-array-callback-reference
+        // eslint-disable-next-line unicorn/no-array-callback-reference, @typescript-eslint/no-unnecessary-condition
         const item = await Promise.race(workers.filter(isNotEmptyElement));
-        if (item.result.done) {
-            // eslint-disable-next-line @typescript-eslint/no-array-delete, @typescript-eslint/no-dynamic-delete
+        if (item.result.done === true) {
+            // eslint-disable-next-line @typescript-eslint/no-array-delete, @typescript-eslint/no-dynamic-delete, sonarjs/no-array-delete
             delete workers[item.k];
             continue;
         }

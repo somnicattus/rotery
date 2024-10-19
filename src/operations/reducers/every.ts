@@ -1,7 +1,7 @@
-import { type Curried } from '../../compositions/curry.js';
+import type { Curried } from '../../compositions/curry.js';
 import { type Purried, purry } from '../../compositions/purry.js';
 import { isIterable } from '../../controls/guards.js';
-import { type Series, type SyncSeries } from '../../controls/types.js';
+import type { Series, SyncSeries } from '../../controls/types.js';
 
 function _syncEvery<T, S extends T>(
     input: SyncSeries<T>,
@@ -52,6 +52,7 @@ export namespace every {
     export function async<T>(
         ...args: Parameters<Curried<typeof _asyncEvery<T>>>
     ): ReturnType<Curried<typeof _asyncEvery<T>>>;
+    // eslint-disable-next-line @typescript-eslint/promise-function-async
     export function async<T>(
         ...args: Parameters<Purried<typeof _asyncEvery<T>>>
     ): ReturnType<Purried<typeof _asyncEvery<T>>> {

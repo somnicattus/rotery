@@ -1,5 +1,5 @@
 import { isIterable } from './guards.js';
-import { type Series, type SyncSeries } from './types.js';
+import type { Series, SyncSeries } from './types.js';
 
 /** Serializes a series into an iterator. */
 export namespace serialize {

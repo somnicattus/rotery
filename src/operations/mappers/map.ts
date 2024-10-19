@@ -1,7 +1,7 @@
-import { type Curried } from '../../compositions/curry.js';
+import type { Curried } from '../../compositions/curry.js';
 import { type Purried, purry } from '../../compositions/purry.js';
 import { isIterable } from '../../controls/guards.js';
-import { type Series, type SyncSeries } from '../../controls/types.js';
+import type { Series, SyncSeries } from '../../controls/types.js';
 
 function* _syncMap<I, O>(input: SyncSeries<I>, mapper: (value: I) => O): Generator<O> {
     for (const value of input) {

@@ -1,6 +1,6 @@
 import { type Purried, purry } from '../../compositions/purry.js';
 import { isIterable } from '../../controls/guards.js';
-import { type Series, type SyncSeries } from '../../controls/types.js';
+import type { Series, SyncSeries } from '../../controls/types.js';
 
 function _syncFind<T, S extends T>(
     input: SyncSeries<T>,
@@ -52,6 +52,7 @@ export namespace find {
     export function async<T, S extends Awaited<T>>(
         test: ((value: Awaited<T>) => value is S) | ((value: Awaited<T>) => Promise<boolean>),
     ): (input: Series<T>) => Promise<S | undefined>;
+    // eslint-disable-next-line @typescript-eslint/promise-function-async
     export function async<T, S extends Awaited<T>>(
         ...args: Parameters<Purried<typeof _asyncFind<T, S>>>
     ): ReturnType<Purried<typeof _asyncFind<T, S>>> {

@@ -1,4 +1,4 @@
-import { Series } from './types.js';
+import type { Series } from './types.js';
 
 const isSyncIterableIterator = (
     value: Awaited<Series<unknown>>,

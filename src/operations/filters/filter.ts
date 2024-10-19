@@ -1,6 +1,6 @@
 import { type Purried, purry } from '../../compositions/purry.js';
 import { isIterable } from '../../controls/guards.js';
-import { type Series, type SyncSeries } from '../../controls/types.js';
+import type { Series, SyncSeries } from '../../controls/types.js';
 
 function* _syncFilter<T, S extends T>(
     input: SyncSeries<T>,

@@ -1,3 +1,4 @@
+/* eslint-disable sonarjs/sonar-max-params */
 /**
  * Pipes a value to a series of operations. Operations are applied left-to-right.
  * @example
@@ -181,7 +182,7 @@ export function pipe<A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P>(
 
 export function pipe(
     value: unknown,
-    ...operations: readonly ((value: unknown) => unknown)[]
+    ...operations: ReadonlyArray<(value: unknown) => unknown>
 ): unknown {
     let result = value;
     for (const operation of operations) {

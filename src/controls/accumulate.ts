@@ -1,5 +1,5 @@
 import { isIterable } from './guards.js';
-import { type Series, type SyncSeries } from './types.js';
+import type { Series, SyncSeries } from './types.js';
 
 /** Accumulates a series into an array. */
 export namespace accumulate {
@@ -7,8 +7,8 @@ export namespace accumulate {
         return [...input];
     }
 
-    export async function async<T>(input: Series<T>): Promise<Awaited<T>[]> {
-        const accumulator: Awaited<T>[] = [];
+    export async function async<T>(input: Series<T>): Promise<Array<Awaited<T>>> {
+        const accumulator: Array<Awaited<T>> = [];
         const awaited = await input;
         if (isIterable(awaited)) {
             for (const value of awaited) {

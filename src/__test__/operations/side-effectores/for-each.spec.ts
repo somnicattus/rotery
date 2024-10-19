@@ -9,6 +9,7 @@ const asyncAction = async (v: number): Promise<void> => {
     await Promise.resolve();
 };
 const expectation = [2, 4, 6];
+// eslint-disable-next-line @typescript-eslint/init-declarations
 let result: number[];
 beforeEach(() => {
     result = [];

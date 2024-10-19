@@ -3,7 +3,8 @@ import { testAsyncValues, testSyncValues } from '../../test-util.js';
 const values = [1, 2];
 const operation = (v: number): number[] => [v * 2, v * 3];
 const asyncOperation = async (v: number): Promise<number[]> => await Promise.resolve(operation(v));
-const asyncIterativeOperation = (v: number) => serialize.async(operation(v));
+const asyncIterativeOperation = (v: number): AsyncIterableIterator<number> =>
+    serialize.async(operation(v));
 
 const expectation = [2, 3, 4, 6];
 describe('flatMap', () => {

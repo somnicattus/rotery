@@ -1,5 +1,5 @@
 import { isIterable } from '../../controls/guards.js';
-import { type Series, type SyncSeries } from '../../controls/types.js';
+import type { Series, SyncSeries } from '../../controls/types.js';
 
 /** Creates a series without duplicated elements. */
 export namespace unique {
