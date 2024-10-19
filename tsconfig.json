@@ -1,5 +1,6 @@
 /* Visit https://aka.ms/tsconfig to read more about this file */
 {
+    "extends": ["@tsconfig/strictest/tsconfig.json"],
     "compilerOptions": {
         /* Language and Environment */
 
@@ -13,23 +14,7 @@
         "moduleResolution": "NodeNext",
 
         /* Emit */
-        "noEmit": true,
-
-        /* Type Checking */
-        "strict": true,
-        "allowUnreachableCode": false,
-        "allowUnusedLabels": false,
-        "exactOptionalPropertyTypes": true,
-        "noFallthroughCasesInSwitch": true,
-        "noImplicitOverride": true,
-        "noImplicitReturns": true,
-        "noPropertyAccessFromIndexSignature": true,
-        "noUncheckedIndexedAccess": true,
-        "noUnusedLocals": true,
-        "noUnusedParameters": true,
-
-        /* Completeness */
-        "skipLibCheck": true
+        "noEmit": true
     },
-    "include": ["src", "*.config.ts"]
+    "include": ["src", "./*.config.ts", "./*.config.js", ".husky/install.mjs"]
 }

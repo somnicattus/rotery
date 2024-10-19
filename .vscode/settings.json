@@ -11,5 +11,6 @@
         ".eslintrc.json": ".eslintignore, .prettierrc.*, .prettierignore, .lintstagedrc.*",
         "tsconfig.json": "tsconfig.*.json",
         "package.json": "package-lock.json, yarn.lock, pnpm-lock.yaml, bun.lockb"
-    }
+    },
+    "eslint.useFlatConfig": true
 }
