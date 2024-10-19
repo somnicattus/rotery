@@ -1,4 +1,4 @@
-import { awaitAll, concat, pipe } from '../../../index.js';
+import { awaitAll, concat, pipe, serialize } from '../../../index.js';
 import { testAsyncValues, testSyncValues } from '../../test-util.js';
 const values = [1, 2];
 const following = [3, 4];
@@ -39,6 +39,16 @@ describe('concat', () => {
             'should concatenate $type with an array through pipe.',
             async ({ data }) => {
                 const result = pipe(data, concat.async(following));
+
+                expect(result.next.bind(result)).toBeTypeOf('function');
+                expect(result[Symbol.asyncIterator]).toBeTypeOf('function');
+                expect(await awaitAll(result)).toStrictEqual(expectation);
+            },
+        );
+        it.each(testAsyncValues(values))(
+            'should concatenate $type with an async iterator.',
+            async ({ data }) => {
+                const result = concat.async(data, serialize.async(following));
 
                 expect(result.next.bind(result)).toBeTypeOf('function');
                 expect(result[Symbol.asyncIterator]).toBeTypeOf('function');

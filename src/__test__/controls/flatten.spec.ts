@@ -1,4 +1,4 @@
-import { awaitAll, flatten } from '../../index.js';
+import { awaitAll, flatten, map, serialize } from '../../index.js';
 import { testAsyncValues, testSyncValues } from '../test-util.js';
 const values1 = [
     [1, 2, 3],
@@ -19,15 +19,22 @@ describe('flatten', () => {
     });
 
     describe('async', () => {
-        it.each(testAsyncValues(values2))(
-            'should flatten $type into async iterator.',
-            async ({ data }) => {
-                const result = flatten.async(data);
-
-                expect(result.next.bind(result)).toBeTypeOf('function');
-                expect(result[Symbol.asyncIterator]).toBeTypeOf('function');
-                expect(await awaitAll(result)).toStrictEqual(expectation2);
+        it.each([
+            ...testAsyncValues(values2),
+            {
+                type: 'async iterators in iterator',
+                data: map.sync(values2, serialize.async),
             },
-        );
+            {
+                type: 'async iterators in async iterator',
+                data: map.async(values2, serialize.async),
+            },
+        ])('should flatten $type into async iterator.', async ({ data }) => {
+            const result = flatten.async(data);
+
+            expect(result.next.bind(result)).toBeTypeOf('function');
+            expect(result[Symbol.asyncIterator]).toBeTypeOf('function');
+            expect(await awaitAll(result)).toStrictEqual(expectation2);
+        });
     });
 });
