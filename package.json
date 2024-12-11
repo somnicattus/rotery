@@ -43,13 +43,11 @@
     "exports": {
         "default": "./dist/esm/index.js",
         "import": "./dist/esm/index.js",
-        "require": "./dist/cjs/index.js",
-        "types": "./dist/types/index.d.ts"
+        "require": "./dist/cjs/index.js"
     },
     "main": "dist/cjs/index.js",
     "module": "dist/esm/index.js",
     "jsnext:main": "dist/esm/index.js",
-    "types": "dist/types/index.d.ts",
     "files": [
         "dist/*",
         "src/*",
@@ -62,10 +60,11 @@
         "dev": "tsx src/index.ts",
         "dev:watch": "tsx watch src/index.ts",
         "start": "node dist",
-        "build": "pnpm run clean && pnpm run \"/build:.*/\"",
+        "build": "pnpm run clean && pnpm run \"/build:.*/\" && cp package.cjs.json dist/cjs/package.json",
         "build:esm": "tsc --project tsconfig.esm.json",
         "build:cjs": "tsc --project tsconfig.cjs.json",
-        "build:types": "tsc --project tsconfig.types.json",
+        "build:types:esm": "tsc --project tsconfig.types.esm.json",
+        "build:types:cjs": "tsc --project tsconfig.types.cjs.json",
         "clean": "rm -r dist | true",
         "test": "vitest run",
         "test:watch": "vitest watch",

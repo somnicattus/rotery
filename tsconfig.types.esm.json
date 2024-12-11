@@ -5,6 +5,6 @@
         "declarationMap": true,
         "emitDeclarationOnly": true,
         "removeComments": false,
-        "outDir": "dist/types"
+        "outDir": "dist/esm"
     }
 }
