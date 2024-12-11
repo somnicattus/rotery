@@ -18,7 +18,7 @@ describe('buffer', () => {
         it.each(testAsyncValues(values))(
             'should buffer $type into async iterator.',
             async ({ data }) => {
-                const result = buffer(data, 3);
+                const result = buffer(data, { size: 3 });
                 expect(result[Symbol.asyncIterator]).toBeTypeOf('function');
                 expect(R.sortBy(await accumulate.async(result), R.identity())).toStrictEqual(
                     expectation,
@@ -37,9 +37,20 @@ describe('buffer', () => {
                 return v;
             });
 
-            const result = buffer(input, 10);
+            const result = buffer(input, { size: 10 });
 
             expect(await accumulate.async(result)).toStrictEqual(values);
+        });
+
+        it('should generate values in input order with fifo mode.', async () => {
+            const input = shuffled.map(async v => {
+                await sleep(v * 5);
+                return v;
+            });
+
+            const result = buffer(input, { size: 10, mode: 'fifo' });
+
+            expect(await accumulate.async(result)).toStrictEqual(shuffled);
         });
     });
 
@@ -47,7 +58,7 @@ describe('buffer', () => {
         it('should throw error when input promise rejects', async () => {
             const input = [Promise.reject(new Error('test error'))];
 
-            const result = buffer(input, 10);
+            const result = buffer(input, { size: 10 });
 
             await expect(async () => await accumulate.async(result)).rejects.toBeInstanceOf(Error);
         });

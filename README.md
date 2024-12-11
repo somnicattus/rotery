@@ -54,7 +54,7 @@ You can smoothly use Remeda with Rotery combined, because Rotery has compatible 
 
 `throttle` allows asynchronous processes to be run in a specified level of concurrency.
 
-The results are generated asynchronously in the order of completion, not in the order of input (the first completed result will be emitted first). Please keep in mind that the order of results differs from the order of input.
+By default, the results are generated asynchronously in the order of completion, not in the order of input (the first completed result will be emitted first). FIFO (the result of first input will be emitted first) is also available as an option.
 
 ```ts
 const responses = await Rt.pipe(
@@ -63,7 +63,7 @@ const responses = await Rt.pipe(
         const response = await fetch(url);
         return await response.json();
     }),
-    Rt.throttle(5), // This maintains up to 5 concurrent HTTP fetch requests.
+    Rt.throttle({ size: 5 }), // This maintains up to 5 concurrent HTTP fetch requests.
     Rt.accumulate.async, // The results are ordered by the completion time.
 );
 ```
