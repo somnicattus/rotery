@@ -12,6 +12,7 @@ function _syncFind<T, S extends T>(
     return undefined;
 }
 
+// eslint-disable-next-line complexity -- need blocks to return value
 async function _asyncFind<T, S extends Awaited<T>>(
     input: Series<T>,
     test: ((value: Awaited<T>) => value is S) | ((value: Awaited<T>) => Promise<boolean>),
@@ -19,10 +20,12 @@ async function _asyncFind<T, S extends Awaited<T>>(
     const awaited = await input;
     if (isIterable(awaited)) {
         for (const value of awaited) {
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion -- Promise can't be type guard
             if (await test(await value)) return value as S;
         }
     } else {
         for await (const value of awaited) {
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion -- Promise can't be type guard
             if (await test(value)) return value as S;
         }
     }
@@ -52,7 +55,7 @@ export namespace find {
     export function async<T, S extends Awaited<T>>(
         test: ((value: Awaited<T>) => value is S) | ((value: Awaited<T>) => Promise<boolean>),
     ): (input: Series<T>) => Promise<S | undefined>;
-    // eslint-disable-next-line @typescript-eslint/promise-function-async
+
     export function async<T, S extends Awaited<T>>(
         ...args: Parameters<Purried<typeof _asyncFind<T, S>>>
     ): ReturnType<Purried<typeof _asyncFind<T, S>>> {

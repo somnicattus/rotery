@@ -13,6 +13,7 @@ function _syncEvery<T, S extends T>(
     return true;
 }
 
+// eslint-disable-next-line complexity -- need blocks to return value
 async function _asyncEvery<T>(
     input: Series<T>,
     test: (value: Awaited<T>) => boolean | Promise<boolean>,
@@ -52,7 +53,7 @@ export namespace every {
     export function async<T>(
         ...args: Parameters<Curried<typeof _asyncEvery<T>>>
     ): ReturnType<Curried<typeof _asyncEvery<T>>>;
-    // eslint-disable-next-line @typescript-eslint/promise-function-async
+
     export function async<T>(
         ...args: Parameters<Purried<typeof _asyncEvery<T>>>
     ): ReturnType<Purried<typeof _asyncEvery<T>>> {

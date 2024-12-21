@@ -13,6 +13,7 @@ export namespace unique {
         }
     }
 
+    // eslint-disable-next-line complexity -- need blocks to yield values
     export async function* async<T>(input: Series<T>): AsyncGenerator<Awaited<T>> {
         const set = new Set<Awaited<T>>();
         const awaited = await input;

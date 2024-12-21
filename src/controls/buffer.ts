@@ -4,6 +4,73 @@ import type { Series } from './types.js';
 
 const isNotEmptyElement = (): true => true;
 
+type AwaitedIterator<T> = Exclude<Awaited<Series<T>>, readonly unknown[]>;
+const toAwaitedIterator = async <T>(input: Series<T>): Promise<AwaitedIterator<T>> => {
+    const awaited = await input;
+    return (Array.isArray as (v: unknown) => v is readonly unknown[])(awaited)
+        ? awaited.values()
+        : awaited;
+};
+
+interface Worker<T> {
+    k: number;
+    result: IteratorResult<Awaited<T>>;
+}
+const constructWorkFunction =
+    <T>(iterator: AwaitedIterator<T>) =>
+    async (k: number): Promise<Worker<T>> => {
+        const next = iterator.next();
+        // HACK: ignoring return results
+        const result =
+            next instanceof Promise
+                ? // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion -- TReturn is not considered
+                  ((await next) as IteratorResult<Awaited<T>>)
+                : ({
+                      // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion -- TReturn is not considered
+                      value: (await next.value) as Awaited<T>,
+                      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- undefined is not considered
+                      done: next.done!,
+                  } as const);
+        return { k, result };
+    };
+
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type -- Return type is defined by the actual values
+const constructWorker = async <T>(input: Series<T>, size: number, mode: 'frfo' | 'fifo') => {
+    const work = constructWorkFunction(await toAwaitedIterator(input));
+    const workers = Array.from({ length: size }, async (_, k) => await work(k));
+
+    let fifoIndex = 0;
+    const next =
+        mode === 'fifo'
+            ? async () => {
+                  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- `fifoIndex` always indicates an existing element in fifo mode.
+                  const { k, result } = await workers[fifoIndex]!;
+                  // eslint-disable-next-line @typescript-eslint/no-array-delete, @typescript-eslint/no-dynamic-delete -- HACK: empty elements mean no more workers
+                  if (result.done === true) delete workers[k];
+                  // eslint-disable-next-line @typescript-eslint/no-floating-promises -- workers contain promises
+                  else workers.splice(k, 1, work(k));
+                  fifoIndex = (fifoIndex + 1) % size;
+                  return result;
+              }
+            : async () => {
+                  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- HACK: empty elements is not evaluated as true
+                  const { k, result } = await Promise.race(workers.filter(isNotEmptyElement));
+                  // eslint-disable-next-line @typescript-eslint/no-array-delete, @typescript-eslint/no-dynamic-delete -- HACK: empty elements mean no more workers
+                  if (result.done === true) delete workers[k];
+                  // eslint-disable-next-line @typescript-eslint/no-floating-promises -- workers contain promises
+                  else workers.splice(k, 1, work(k));
+                  return result;
+              };
+
+    return {
+        next,
+        get isActive() {
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- HACK: empty elements is not evaluated as true
+            return workers.some(isNotEmptyElement);
+        },
+    } as const;
+};
+
 async function* _buffer<T>(
     input: Series<T>,
     options: {
@@ -16,55 +83,16 @@ async function* _buffer<T>(
         mode?: 'frfo' | 'fifo';
     },
 ): AsyncGenerator<Awaited<T>> {
-    const { size, mode } = { mode: 'frfo', ...options };
+    const { size, mode } = { mode: 'frfo', ...options } as const;
     if (size <= 0 || !Number.isInteger(size))
         throw new RangeError(`"size" must be a positive integer (got ${size.toString()}).`);
 
-    const awaited = await input;
-    const iterator = (Array.isArray as (v: unknown) => v is readonly unknown[])(awaited)
-        ? awaited.values()
-        : awaited;
+    const worker = await constructWorker(input, size, mode);
 
-    const work = async (
-        k: number,
-    ): Promise<{
-        k: number;
-        result: IteratorResult<Awaited<T>>;
-    }> => {
-        const next = iterator.next();
-        // HACK: ignoring return results
-        const result =
-            next instanceof Promise
-                ? ((await next) as IteratorResult<Awaited<T>>)
-                : ({
-                      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-                      value: await next.value,
-                      done: next.done,
-                  } as const as IteratorResult<Awaited<T>>);
-        return { k, result };
-    };
-
-    const workers = Array.from({ length: size }, async (_, k) => await work(k));
-
-    let fifoIndex = 0;
-    // eslint-disable-next-line unicorn/no-array-callback-reference, @typescript-eslint/no-unnecessary-condition
-    while (workers.some(isNotEmptyElement)) {
-        const item =
-            mode === 'fifo'
-                ? // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                  await workers[fifoIndex]!
-                : // eslint-disable-next-line unicorn/no-array-callback-reference, @typescript-eslint/no-unnecessary-condition
-                  await Promise.race(workers.filter(isNotEmptyElement));
-        if (item.result.done === true) {
-            // eslint-disable-next-line @typescript-eslint/no-array-delete, @typescript-eslint/no-dynamic-delete, sonarjs/no-array-delete
-            delete workers[item.k];
-            fifoIndex = (fifoIndex + 1) % size;
-            continue;
-        }
-        yield item.result.value;
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        workers.splice(item.k, 1, work(item.k));
-        fifoIndex = (fifoIndex + 1) % size;
+    while (worker.isActive) {
+        const result = await worker.next();
+        if (result.done === true) continue;
+        yield result.value;
     }
 }
 

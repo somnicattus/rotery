@@ -15,14 +15,13 @@ export default ts.config(
         files: ['**/*.ts', '**/*.js', '**/*.mjs'],
     },
     love,
-    unicorn.configs['flat/recommended'],
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-    sonarjs.configs.recommended,
-    vitest.configs.recommended,
     {
         plugins: {
             'unused-imports': unusedImports,
             'simple-import-sort': simpleImportSort,
+            unicorn,
+            sonarjs,
+            vitest,
         },
         rules: {
             // simple-import-sort

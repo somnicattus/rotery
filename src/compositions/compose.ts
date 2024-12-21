@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/max-params -- `compose` needs many parameters in its signature. */
 import { pipe } from './pipe.js';
 
 /**

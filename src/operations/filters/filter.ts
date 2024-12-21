@@ -11,6 +11,7 @@ function* _syncFilter<T, S extends T>(
     }
 }
 
+// eslint-disable-next-line complexity -- need blocks to yield values
 async function* _asyncFilter<T, S extends Awaited<T>>(
     input: Series<T>,
     test: ((value: Awaited<T>) => value is S) | ((value: Awaited<T>) => Promise<boolean>),
@@ -18,10 +19,12 @@ async function* _asyncFilter<T, S extends Awaited<T>>(
     const awaited = await input;
     if (isIterable(awaited)) {
         for (const value of awaited) {
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion -- Promise can't be type guard
             if (await test(await value)) yield value as S;
         }
     } else {
         for await (const value of awaited) {
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion -- Promise can't be type guard
             if (await test(value)) yield value as S;
         }
     }

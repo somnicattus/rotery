@@ -14,6 +14,7 @@ function* _syncDrop<T>(input: SyncSeries<T>, drop: number): Generator<T> {
     }
 }
 
+// eslint-disable-next-line complexity -- need blocks to yield values
 async function* _asyncDrop<T>(input: Series<T>, drop: number): AsyncGenerator<T> {
     let leftDrop = drop;
     const awaited = await input;

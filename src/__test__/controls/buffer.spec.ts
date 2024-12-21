@@ -1,15 +1,15 @@
+import { promisify } from 'node:util';
+
 import * as R from 'remeda';
 
 import { accumulate, buffer } from '../../index.js';
 import { testAsyncValues } from '../test-util.js';
 
-const sleep = async (msec: number): Promise<void> => {
-    await new Promise<void>(resolve =>
-        setTimeout(() => {
-            resolve();
-        }, msec),
-    );
-};
+const sleep = promisify(
+    (arg1: Parameters<typeof setTimeout>[1], callback: Parameters<typeof setTimeout>[0]) => {
+        setTimeout(callback, arg1);
+    },
+);
 
 describe('buffer', () => {
     describe('input types', () => {

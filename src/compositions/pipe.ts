@@ -1,4 +1,4 @@
-/* eslint-disable sonarjs/sonar-max-params */
+/* eslint-disable @typescript-eslint/max-params -- `pipe` needs many parameters in its signature. */
 /**
  * Pipes a value to a series of operations. Operations are applied left-to-right.
  * @example

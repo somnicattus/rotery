@@ -37,10 +37,10 @@ const result = await Rt.pipe(
 
 ## Features
 
--   Utility functions (including `map`, `filter`, `reduce`) for `Iterator`s and `AsyncIterator`s.
--   Explicit lazy evaluation by JavaScript iterator feature.
--   Type safe function currying and type safe function composition.
--   Controllable asynchronous iterative processes in both parallel and serial, even with specified concurrency.
+- Utility functions (including `map`, `filter`, `reduce`) for `Iterator`s and `AsyncIterator`s.
+- Explicit lazy evaluation by JavaScript iterator feature.
+- Type safe function currying and type safe function composition.
+- Controllable asynchronous iterative processes in both parallel and serial, even with specified concurrency.
 
 ## Want more general utility functions?
 

@@ -55,7 +55,7 @@ export namespace reduce {
     export function async<T, R>(
         ...args: Parameters<Curried<typeof _asyncReduce<T, R>>>
     ): ReturnType<Curried<typeof _asyncReduce<T, R>>>;
-    // eslint-disable-next-line @typescript-eslint/promise-function-async
+
     export function async<T, R>(
         ...args: Parameters<Purried<typeof _asyncReduce<T, R>>>
     ): ReturnType<Purried<typeof _asyncReduce<T, R>>> {

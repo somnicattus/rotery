@@ -45,7 +45,7 @@ export namespace forEach {
     export function async<T>(
         ...args: Parameters<Curried<typeof _asyncForEach<T>>>
     ): ReturnType<Curried<typeof _asyncForEach<T>>>;
-    // eslint-disable-next-line @typescript-eslint/promise-function-async
+
     export function async<T>(
         ...args: Parameters<Purried<typeof _asyncForEach<T>>>
     ): ReturnType<Purried<typeof _asyncForEach<T>>> {

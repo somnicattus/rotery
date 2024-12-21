@@ -10,6 +10,7 @@ function _syncSome<T>(input: SyncSeries<T>, test: (value: T) => boolean): boolea
     return false;
 }
 
+// eslint-disable-next-line complexity -- need blocks to return value
 async function _asyncSome<T>(
     input: Series<T>,
     test: (value: Awaited<T>) => boolean | Promise<boolean>,
@@ -48,7 +49,7 @@ export namespace some {
     export function async<T>(
         ...args: Parameters<Curried<typeof _asyncSome<T>>>
     ): ReturnType<Curried<typeof _asyncSome<T>>>;
-    // eslint-disable-next-line @typescript-eslint/promise-function-async
+
     export function async<T>(
         ...args: Parameters<Purried<typeof _asyncSome<T>>>
     ): ReturnType<Purried<typeof _asyncSome<T>>> {

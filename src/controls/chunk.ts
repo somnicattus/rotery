@@ -8,13 +8,16 @@ function* _syncChunk<T, L extends number>(input: SyncSeries<T>, size: L): Genera
     for (const value of input) {
         accumulator.push(value);
         if (accumulator.length >= size) {
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion -- Chunked cannot be safely typed
             yield accumulator as Chunked<T, L>;
             accumulator = [];
         }
     }
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion -- Chunked cannot be safely typed
     if (accumulator.length > 0) yield accumulator as Chunked<T, L>;
 }
 
+// eslint-disable-next-line complexity -- need blocks to yield values
 async function* _asyncChunk<T, L extends number>(
     input: Series<T>,
     size: L,
@@ -25,6 +28,7 @@ async function* _asyncChunk<T, L extends number>(
         for (const value of awaited) {
             accumulator.push(await value);
             if (accumulator.length >= size) {
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion -- Chunked cannot be safely typed
                 yield accumulator as Chunked<Awaited<T>, L>;
                 accumulator = [];
             }
@@ -33,11 +37,13 @@ async function* _asyncChunk<T, L extends number>(
         for await (const value of awaited) {
             accumulator.push(value);
             if (accumulator.length >= size) {
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion -- Chunked cannot be safely typed
                 yield accumulator as Chunked<Awaited<T>, L>;
                 accumulator = [];
             }
         }
     }
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion -- Chunked cannot be safely typed
     if (accumulator.length > 0) yield accumulator as Chunked<Awaited<T>, L>;
 }
 
