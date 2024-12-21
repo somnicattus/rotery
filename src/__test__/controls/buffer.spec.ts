@@ -63,4 +63,15 @@ describe('buffer', () => {
             await expect(async () => await accumulate.async(result)).rejects.toBeInstanceOf(Error);
         });
     });
+
+    describe('validation', () => {
+        it.each(([-1, 1.5, Infinity, NaN] as number[]).map(size => ({ size })))(
+            'should throw RangeError if the size is not positive integer (size: $size)',
+            async ({ size }) => {
+                await expect(
+                    async () => await accumulate.async(buffer([1, 2, 3], { size })),
+                ).rejects.toThrow(RangeError);
+            },
+        );
+    });
 });
