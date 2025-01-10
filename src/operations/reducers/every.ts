@@ -5,7 +5,7 @@ import type { Series, SyncSeries } from '../../controls/types.js';
 
 function _syncEvery<T, S extends T>(
     input: SyncSeries<T>,
-    test: (value: T) => value is S,
+    test: ((value: T) => value is S) | ((value: T) => boolean),
 ): input is SyncSeries<S> {
     for (const value of input) {
         if (!test(value)) return false;
