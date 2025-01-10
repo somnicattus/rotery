@@ -36,21 +36,29 @@ export namespace filter {
         input: SyncSeries<T>,
         test: (value: T) => value is S,
     ): Generator<S>;
+    // @ts-expect-error support both type narrowing and boolean
+    export function sync<T>(input: SyncSeries<T>, test: (value: T) => boolean): Generator<T>;
     export function sync<T, S extends T>(
         test: (value: T) => value is S,
     ): (input: SyncSeries<T>) => Generator<S>;
+    export function sync<T>(test: (value: T) => boolean): (input: SyncSeries<T>) => Generator<T>;
     export function sync<T, S extends T>(
         ...args: Parameters<Purried<typeof _syncFilter<T, S>>>
     ): ReturnType<Purried<typeof _syncFilter<T, S>>> {
         return purry(_syncFilter<T, S>)(...args);
     }
 
+    // @ts-expect-error support both type narrowing and boolean
     export function async<T, S extends Awaited<T>>(
         input: Series<T>,
-        test: ((value: Awaited<T>) => value is S) | ((value: Awaited<T>) => Promise<boolean>),
+        test:
+            | ((value: Awaited<T>) => value is S)
+            | ((value: Awaited<T>) => boolean | Promise<boolean>),
     ): AsyncGenerator<S>;
     export function async<T, S extends Awaited<T>>(
-        test: ((value: Awaited<T>) => value is S) | ((value: Awaited<T>) => Promise<boolean>),
+        test:
+            | ((value: Awaited<T>) => value is S)
+            | ((value: Awaited<T>) => boolean | Promise<boolean>),
     ): (input: Series<T>) => AsyncGenerator<S>;
     export function async<T, S extends Awaited<T>>(
         ...args: Parameters<Purried<typeof _asyncFilter<T, S>>>
