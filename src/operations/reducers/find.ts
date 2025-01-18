@@ -1,5 +1,5 @@
 import { type Purried, purry } from '../../compositions/purry.js';
-import { isIterable } from '../../controls/guards.js';
+import { _isIterable } from '../../controls/_guards.js';
 import type { Series, SyncSeries } from '../../controls/types.js';
 
 function _syncFind<T, S extends T>(
@@ -18,7 +18,7 @@ async function _asyncFind<T, S extends Awaited<T>>(
     test: ((value: Awaited<T>) => value is S) | ((value: Awaited<T>) => Promise<boolean>),
 ): Promise<S | undefined> {
     const awaited = await input;
-    if (isIterable(awaited)) {
+    if (_isIterable(awaited)) {
         for (const value of awaited) {
             // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion -- Promise can't be type guard
             if (await test(await value)) return value as S;

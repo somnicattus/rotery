@@ -1,4 +1,4 @@
-import { isIterable } from './guards.js';
+import { _isIterable } from './_guards.js';
 import type { Series, SyncSeries } from './types.js';
 
 /** Accumulates a series into an array. */
@@ -10,7 +10,7 @@ export namespace accumulate {
     export async function async<T>(input: Series<T>): Promise<Array<Awaited<T>>> {
         const accumulator: Array<Awaited<T>> = [];
         const awaited = await input;
-        if (isIterable(awaited)) {
+        if (_isIterable(awaited)) {
             for (const value of awaited) {
                 accumulator.push(await value);
             }

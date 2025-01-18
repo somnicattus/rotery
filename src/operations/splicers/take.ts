@@ -1,6 +1,6 @@
 import type { Curried } from '../../compositions/curry.js';
 import { type Purried, purry } from '../../compositions/purry.js';
-import { isIterable } from '../../controls/guards.js';
+import { _isIterable } from '../../controls/_guards.js';
 import type { Series, SyncSeries } from '../../controls/types.js';
 
 function* _syncTake<T>(input: SyncSeries<T>, take: number): Generator<T> {
@@ -18,7 +18,7 @@ function* _syncTake<T>(input: SyncSeries<T>, take: number): Generator<T> {
 async function* _asyncTake<T>(input: Series<T>, take: number): AsyncGenerator<T> {
     let leftTake = take;
     const awaited = await input;
-    if (isIterable(awaited)) {
+    if (_isIterable(awaited)) {
         for (const value of awaited) {
             if (leftTake <= 0) {
                 break;

@@ -1,4 +1,4 @@
-import { isIterable } from './guards.js';
+import { _isIterable } from './_guards.js';
 import type { Series, SyncSeries } from './types.js';
 
 /** Flattens a series of series by one level deep. */
@@ -14,10 +14,10 @@ export namespace flatten {
     // eslint-disable-next-line complexity -- async flatten needs two level loop
     export async function* async<T>(input: Series<Series<T>>): AsyncGenerator<Awaited<T>> {
         const awaited = await input;
-        if (isIterable(awaited)) {
+        if (_isIterable(awaited)) {
             for (const pool of awaited) {
                 const innerAwaited = await pool;
-                if (isIterable(innerAwaited)) {
+                if (_isIterable(innerAwaited)) {
                     for (const value of innerAwaited) {
                         yield value;
                     }
@@ -29,7 +29,7 @@ export namespace flatten {
             }
         } else {
             for await (const pool of awaited) {
-                if (isIterable(pool)) {
+                if (_isIterable(pool)) {
                     for (const value of pool) {
                         yield value;
                     }
