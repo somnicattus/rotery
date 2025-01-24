@@ -1,15 +1,12 @@
 import type { Series, SyncSeries } from '../../controls/types.js';
+import { _uniqueContext } from './_unique-context.js';
 import { filter } from './filter.js';
 
 /** Creates a series without duplicated elements. */
 export namespace unique {
-    export function sync<T>(input: SyncSeries<T>): Generator<T> {
-        const set = new Set<T>();
-        return filter.sync(input, value => (set.has(value) ? false : (set.add(value), true)));
-    }
+    export const sync = <T>(input: SyncSeries<T>): Generator<T> =>
+        filter.sync(input, _uniqueContext());
 
-    export function async<T>(input: Series<T>): AsyncGenerator<Awaited<T>> {
-        const set = new Set<Awaited<T>>();
-        return filter.async(input, value => (set.has(value) ? false : (set.add(value), true)));
-    }
+    export const async = <T>(input: Series<T>): AsyncGenerator<Awaited<T>> =>
+        filter.async(input, _uniqueContext());
 }
