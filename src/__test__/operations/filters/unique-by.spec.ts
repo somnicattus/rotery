@@ -3,26 +3,35 @@ import { testAsyncValues, testSyncValues } from '../../test-util.js';
 const values = [1.1, 2.1, 3.1, 1.2, 4.1, 1.3, 2.2];
 const expectation = [1.1, 2.1, 3.1, 4.1];
 const key = (value: number): number => Math.round(value);
+const asyncKey = async (value: number): Promise<number> => await Promise.resolve(Math.round(value));
 
 describe('uniqueBy', () => {
     describe('sync', () => {
-        it.each(testSyncValues(values))(
-            'should create a unique series from $type .',
-            ({ data }) => {
-                const result = uniqueBy.sync(data, key);
+        it.each(testSyncValues(values))('should create a unique series from $type.', ({ data }) => {
+            const result = uniqueBy.sync(data, key);
 
-                expect(result.next.bind(result)).toBeTypeOf('function');
-                expect(result[Symbol.iterator]).toBeTypeOf('function');
-                expect([...result]).toStrictEqual(expectation);
-            },
-        );
+            expect(result.next.bind(result)).toBeTypeOf('function');
+            expect(result[Symbol.iterator]).toBeTypeOf('function');
+            expect([...result]).toStrictEqual(expectation);
+        });
     });
 
     describe('async', () => {
         it.each(testAsyncValues(values))(
-            'should create a unique series from $type .',
+            'should create a unique series from $type.',
             async ({ data }) => {
                 const result = uniqueBy.async(data, key);
+
+                expect(result.next.bind(result)).toBeTypeOf('function');
+                expect(result[Symbol.asyncIterator]).toBeTypeOf('function');
+                expect(await awaitAll(result)).toStrictEqual(expectation);
+            },
+        );
+
+        it.each(testAsyncValues(values))(
+            'should create a unique series from $type with async key.',
+            async ({ data }) => {
+                const result = uniqueBy.async(data, asyncKey);
 
                 expect(result.next.bind(result)).toBeTypeOf('function');
                 expect(result[Symbol.asyncIterator]).toBeTypeOf('function');

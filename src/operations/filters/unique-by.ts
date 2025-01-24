@@ -13,7 +13,7 @@ const _asyncUniqueBy = <T>(
     key: (value: Awaited<T>) => MaybePromise<unknown>,
 ): AsyncGenerator<Awaited<T>> => {
     const isUnique = _uniqueContext();
-    return filter.async(input, value => isUnique(key(value)));
+    return filter.async(input, async value => isUnique(await key(value)));
 };
 
 export namespace uniqueBy {
