@@ -15,6 +15,7 @@ export * from './reducers/find.js';
 export * from './reducers/reduce.js';
 export * from './reducers/some.js';
 export * from './side-effectors/for-each.js';
+export * from './side-effectors/peek.js';
 export * from './splicers/concat.js';
 export * from './splicers/drop.js';
 export * from './splicers/take.js';
