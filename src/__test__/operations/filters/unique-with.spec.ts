@@ -8,21 +8,18 @@ const asyncEquals = async (v1: number, v2: number): Promise<boolean> =>
 
 describe('uniqueWith', () => {
     describe('sync', () => {
-        it.each(testSyncValues(values))(
-            'should create a unique series from $type .',
-            ({ data }) => {
-                const result = uniqueWith.sync(data, equals);
+        it.each(testSyncValues(values))('should create a unique series from $type.', ({ data }) => {
+            const result = uniqueWith.sync(data, equals);
 
-                expect(result.next.bind(result)).toBeTypeOf('function');
-                expect(result[Symbol.iterator]).toBeTypeOf('function');
-                expect([...result]).toStrictEqual(expectation);
-            },
-        );
+            expect(result.next.bind(result)).toBeTypeOf('function');
+            expect(result[Symbol.iterator]).toBeTypeOf('function');
+            expect([...result]).toStrictEqual(expectation);
+        });
     });
 
     describe('async', () => {
         it.each(testAsyncValues(values))(
-            'should create a unique series from $type .',
+            'should create a unique series from $type.',
             async ({ data }) => {
                 const result = uniqueWith.async(data, equals);
 

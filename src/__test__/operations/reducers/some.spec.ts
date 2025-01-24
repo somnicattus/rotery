@@ -7,7 +7,7 @@ const asyncTest = async (v: number): Promise<boolean> => await Promise.resolve(t
 describe('find', () => {
     describe('sync', () => {
         it.each(testSyncValues(positiveTarget))(
-            'should return true with a positive target $type .',
+            'should return true with a positive target $type.',
             ({ data }) => {
                 const result = some.sync(data, test);
                 expect(result).toBeTruthy();
@@ -24,7 +24,7 @@ describe('find', () => {
 
     describe('async', () => {
         it.each(testAsyncValues(positiveTarget))(
-            'should return true with a positive target $type .',
+            'should return true with a positive target $type.',
             async ({ data }) => {
                 const result = some.async(data, test);
                 expect(await result).toBeTruthy();

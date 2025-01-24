@@ -8,7 +8,7 @@ const expectation = 2;
 describe('some', () => {
     describe('sync', () => {
         it.each(testSyncValues(positiveTarget))(
-            'should return value with a positive target $type .',
+            'should return value with a positive target $type.',
             ({ data }) => {
                 const result = find.sync(data, test);
                 expect(result).toBe(expectation);
@@ -25,7 +25,7 @@ describe('some', () => {
 
     describe('async', () => {
         it.each(testAsyncValues(positiveTarget))(
-            'should return value with a positive target $type .',
+            'should return value with a positive target $type.',
             async ({ data }) => {
                 const result = find.async(data, test);
                 expect(await result).toBe(expectation);

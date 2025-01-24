@@ -6,7 +6,7 @@ const asyncOperation = async (v: number): Promise<boolean> => await Promise.reso
 const expectation = [1, 3];
 describe('filter', () => {
     describe('sync', () => {
-        it.each(testSyncValues(values))('should filter $type .', ({ data }) => {
+        it.each(testSyncValues(values))('should filter $type.', ({ data }) => {
             const result = filter.sync(data, operation);
 
             expect(result.next.bind(result)).toBeTypeOf('function');
@@ -23,7 +23,7 @@ describe('filter', () => {
     });
 
     describe('async', () => {
-        it.each(testAsyncValues(values))('should filter $type .', async ({ data }) => {
+        it.each(testAsyncValues(values))('should filter $type.', async ({ data }) => {
             const result = filter.async(data, operation);
 
             expect(result.next.bind(result)).toBeTypeOf('function');

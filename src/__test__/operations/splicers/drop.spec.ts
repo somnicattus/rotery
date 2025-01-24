@@ -5,7 +5,7 @@ const count = 2;
 const expectation = [3, 4];
 describe('drop', () => {
     describe('sync', () => {
-        it.each(testSyncValues(values))('should drop elements from $type .', ({ data }) => {
+        it.each(testSyncValues(values))('should drop elements from $type.', ({ data }) => {
             const result = drop.sync(data, count);
 
             expect(result.next.bind(result)).toBeTypeOf('function');
@@ -25,7 +25,7 @@ describe('drop', () => {
     });
 
     describe('async', () => {
-        it.each(testAsyncValues(values))('should drop elements from $type .', async ({ data }) => {
+        it.each(testAsyncValues(values))('should drop elements from $type.', async ({ data }) => {
             const result = drop.async(data, count);
 
             expect(result.next.bind(result)).toBeTypeOf('function');

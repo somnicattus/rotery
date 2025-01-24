@@ -5,7 +5,7 @@ const count = 2;
 const expectation = [1, 2];
 describe('take', () => {
     describe('sync', () => {
-        it.each(testSyncValues(values))('should take elements from $type .', ({ data }) => {
+        it.each(testSyncValues(values))('should take elements from $type.', ({ data }) => {
             const result = take.sync(data, count);
 
             expect(result.next.bind(result)).toBeTypeOf('function');
@@ -25,7 +25,7 @@ describe('take', () => {
     });
 
     describe('async', () => {
-        it.each(testAsyncValues(values))('should take elements from $type .', async ({ data }) => {
+        it.each(testAsyncValues(values))('should take elements from $type.', async ({ data }) => {
             const result = take.async(data, count);
 
             expect(result.next.bind(result)).toBeTypeOf('function');
