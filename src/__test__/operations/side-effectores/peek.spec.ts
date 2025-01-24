@@ -59,7 +59,7 @@ describe('peek', () => {
             },
         );
         it.each(testAsyncValues(values))(
-            'should perform side effect and pass through input values with $type by async operation.',
+            'should perform async side effect and pass through input values with $type.',
             async ({ data }) => {
                 const result = peek.async(data, asyncAction);
                 expect(result.next.bind(result)).toBeTypeOf('function');
@@ -69,7 +69,7 @@ describe('peek', () => {
             },
         );
         it.each(testAsyncValues(values))(
-            'should perform side effect and pass through input values with $type through pipe by async operation.',
+            'should perform async side effect and pass through input values with $type through pipe.',
             async ({ data }) => {
                 const result = pipe(data, peek.async(asyncAction));
                 expect(result.next.bind(result)).toBeTypeOf('function');

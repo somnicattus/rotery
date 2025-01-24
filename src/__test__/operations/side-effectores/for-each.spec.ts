@@ -15,12 +15,12 @@ beforeEach(() => {
 });
 describe('forEach', () => {
     describe('sync', () => {
-        it.each(testSyncValues(values))('should reduce $type into value.', ({ data }) => {
+        it.each(testSyncValues(values))('should perform side effect with $type.', ({ data }) => {
             forEach.sync(data, action);
             expect(result).toStrictEqual(expectation);
         });
         it.each(testSyncValues(values))(
-            'should reduce $type into value through pipe.',
+            'should perform side effect with $type through pipe.',
             ({ data }) => {
                 pipe(data, forEach.sync(action));
                 expect(result).toStrictEqual(expectation);
@@ -29,26 +29,29 @@ describe('forEach', () => {
     });
 
     describe('async', () => {
-        it.each(testAsyncValues(values))('should reduce $type into promise.', async ({ data }) => {
-            await forEach.async(data, action);
-            expect(result).toStrictEqual(expectation);
-        });
         it.each(testAsyncValues(values))(
-            'should reduce $type into promise through pipe.',
+            'should perform side effect with $type.',
+            async ({ data }) => {
+                await forEach.async(data, action);
+                expect(result).toStrictEqual(expectation);
+            },
+        );
+        it.each(testAsyncValues(values))(
+            'should perform side effect with $type through pipe.',
             async ({ data }) => {
                 await pipe(data, forEach.async(action));
                 expect(result).toStrictEqual(expectation);
             },
         );
         it.each(testAsyncValues(values))(
-            'should reduce $type into promise by async operation.',
+            'should perform async side effect with $type.',
             async ({ data }) => {
                 await forEach.async(data, asyncAction);
                 expect(result).toStrictEqual(expectation);
             },
         );
         it.each(testAsyncValues(values))(
-            'should reduce $type into promise through pipe by async operation.',
+            'should perform async side effect with $type through pipe.',
             async ({ data }) => {
                 await pipe(data, forEach.async(asyncAction));
                 expect(result).toStrictEqual(expectation);
