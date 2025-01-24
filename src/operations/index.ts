@@ -1,5 +1,7 @@
 export * from './filters/filter.js';
 export * from './filters/unique.js';
+export * from './filters/unique-by.js';
+export * from './filters/unique-with.js';
 export * from './mappers/flat-map.js';
 export * from './mappers/map.js';
 export * from './reducers/every.js';
