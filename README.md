@@ -50,9 +50,9 @@ Rotery is greatly inspired by Remeda's features: overridden "data-first" and "da
 
 You can smoothly use Remeda with Rotery combined, because Rotery has compatible pipelining system with Remeda!
 
-## Throttling (concurrent async processes)
+## Async processes in a certain concurrency level
 
-`throttle` allows asynchronous processes to be run in a specified level of concurrency.
+`concurrency` allows asynchronous processes to be run in a specified level of concurrency.
 
 By default, the results are generated asynchronously in the order of completion, not in the order of input (the first completed result will be emitted first). FIFO (the result of first input will be emitted first) is also available as an option.
 
@@ -63,7 +63,7 @@ const responses = await Rt.pipe(
         const response = await fetch(url);
         return await response.json();
     }),
-    Rt.throttle({ size: 5 }), // This maintains up to 5 concurrent HTTP fetch requests.
+    Rt.concurrency({ size: 5 }), // This maintains up to 5 concurrent HTTP fetch requests.
     Rt.accumulate.async, // The results are ordered by the completion time.
 );
 ```
