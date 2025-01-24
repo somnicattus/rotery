@@ -14,7 +14,6 @@ function* _syncFlatMap<I, O>(
     }
 }
 
-// eslint-disable-next-line complexity -- async flatMap needs two level loop
 async function* _asyncFlatMap<I, O>(
     input: Series<I>,
     mapper: (value: Awaited<I>) => Series<O>,

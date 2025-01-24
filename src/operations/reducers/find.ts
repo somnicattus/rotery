@@ -12,7 +12,6 @@ function _syncFind<T, S extends T>(
     return undefined;
 }
 
-// eslint-disable-next-line complexity -- need blocks to return value
 async function _asyncFind<T, S extends Awaited<T>>(
     input: Series<T>,
     test: ((value: Awaited<T>) => value is S) | ((value: Awaited<T>) => MaybePromise<boolean>),

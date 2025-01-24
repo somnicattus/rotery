@@ -12,7 +12,6 @@ function* _syncConcat<T>(preceding: SyncSeries<T>, following: SyncSeries<T>): Ge
     }
 }
 
-// eslint-disable-next-line complexity -- need blocks to yield values
 async function* _asyncConcat<T>(preceding: Series<T>, following: Series<T>): AsyncGenerator<T> {
     const awaitedPreceding = await preceding;
     if (_isIterable(awaitedPreceding)) {

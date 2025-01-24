@@ -11,7 +11,6 @@ function* _syncFilter<T, S extends T>(
     }
 }
 
-// eslint-disable-next-line complexity -- need blocks to yield values
 async function* _asyncFilter<T, S extends Awaited<T>>(
     input: Series<T>,
     test: ((value: Awaited<T>) => value is S) | ((value: Awaited<T>) => MaybePromise<boolean>),

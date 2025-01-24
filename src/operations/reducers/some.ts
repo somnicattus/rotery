@@ -10,7 +10,6 @@ function _syncSome<T>(input: SyncSeries<T>, test: (value: T) => boolean): boolea
     return false;
 }
 
-// eslint-disable-next-line complexity -- need blocks to return value
 async function _asyncSome<T>(
     input: Series<T>,
     test: (value: Awaited<T>) => MaybePromise<boolean>,

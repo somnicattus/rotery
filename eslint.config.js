@@ -71,6 +71,7 @@ export default ts.config(
         files: ['**/*.spec.ts'],
         rules: {
             '@typescript-eslint/no-magic-numbers': 'off',
+            'max-nested-callbacks': 'off',
         },
     },
     prettier,

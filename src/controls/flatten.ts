@@ -11,7 +11,6 @@ export namespace flatten {
         }
     }
 
-    // eslint-disable-next-line complexity -- async flatten needs two level loop
     export async function* async<T>(input: Series<Series<T>>): AsyncGenerator<Awaited<T>> {
         const awaited = await input;
         if (_isIterable(awaited)) {

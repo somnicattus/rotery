@@ -13,7 +13,6 @@ function _syncEvery<T, S extends T>(
     return true;
 }
 
-// eslint-disable-next-line complexity -- need blocks to return value
 async function _asyncEvery<T>(
     input: Series<T>,
     test: (value: Awaited<T>) => MaybePromise<boolean>,

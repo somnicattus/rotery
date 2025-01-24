@@ -17,7 +17,6 @@ function* _syncChunk<T, L extends number>(input: SyncSeries<T>, size: L): Genera
     if (accumulator.length > 0) yield accumulator as Chunked<T, L>;
 }
 
-// eslint-disable-next-line complexity -- need blocks to yield values
 async function* _asyncChunk<T, L extends number>(
     input: Series<T>,
     size: L,
