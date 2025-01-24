@@ -1,7 +1,7 @@
 import type { Curried } from '../../compositions/curry.js';
 import { type Purried, purry } from '../../compositions/purry.js';
 import { _isIterable } from '../../controls/_guards.js';
-import type { Series, SyncSeries } from '../../controls/types.js';
+import type { MaybePromise, Series, SyncSeries } from '../../controls/types.js';
 
 function _syncSome<T>(input: SyncSeries<T>, test: (value: T) => boolean): boolean {
     for (const value of input) {
@@ -13,7 +13,7 @@ function _syncSome<T>(input: SyncSeries<T>, test: (value: T) => boolean): boolea
 // eslint-disable-next-line complexity -- need blocks to return value
 async function _asyncSome<T>(
     input: Series<T>,
-    test: (value: Awaited<T>) => boolean | Promise<boolean>,
+    test: (value: Awaited<T>) => MaybePromise<boolean>,
 ): Promise<boolean> {
     const awaited = await input;
     if (_isIterable(awaited)) {

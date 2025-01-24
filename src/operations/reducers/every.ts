@@ -1,7 +1,7 @@
 import type { Curried } from '../../compositions/curry.js';
 import { type Purried, purry } from '../../compositions/purry.js';
 import { _isIterable } from '../../controls/_guards.js';
-import type { Series, SyncSeries } from '../../controls/types.js';
+import type { MaybePromise, Series, SyncSeries } from '../../controls/types.js';
 
 function _syncEvery<T, S extends T>(
     input: SyncSeries<T>,
@@ -16,7 +16,7 @@ function _syncEvery<T, S extends T>(
 // eslint-disable-next-line complexity -- need blocks to return value
 async function _asyncEvery<T>(
     input: Series<T>,
-    test: (value: Awaited<T>) => boolean | Promise<boolean>,
+    test: (value: Awaited<T>) => MaybePromise<boolean>,
 ): Promise<boolean> {
     const awaited = await input;
     if (_isIterable(awaited)) {
@@ -41,6 +41,8 @@ export namespace every {
     export function sync<T, S extends T>(
         test: (value: T) => value is S,
     ): (input: SyncSeries<T>) => input is SyncSeries<S>;
+    export function sync<T>(input: SyncSeries<T>, test: (value: T) => boolean): boolean;
+    export function sync<T>(test: (value: T) => boolean): (input: SyncSeries<T>) => boolean;
     export function sync<T, S extends T>(
         ...args: Parameters<Purried<typeof _syncEvery<T, S>>>
     ): ReturnType<Purried<typeof _syncEvery<T, S>>> {
@@ -53,7 +55,6 @@ export namespace every {
     export function async<T>(
         ...args: Parameters<Curried<typeof _asyncEvery<T>>>
     ): ReturnType<Curried<typeof _asyncEvery<T>>>;
-
     export function async<T>(
         ...args: Parameters<Purried<typeof _asyncEvery<T>>>
     ): ReturnType<Purried<typeof _asyncEvery<T>>> {
