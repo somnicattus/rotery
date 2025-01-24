@@ -98,7 +98,12 @@
         "vitest": "^3.0.4"
     },
     "volta": {
-        "node": "22.12.0"
+        "node": "22.13.1"
     },
-    "packageManager": "pnpm@9.12.1"
+    "packageManager": "pnpm@10.0.0",
+    "pnpm": {
+        "executionEnv": {
+            "nodeVersion": "22.13.1"
+        }
+    }
 }
