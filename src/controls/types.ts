@@ -1,4 +1,5 @@
-export type SyncSeries<T> = readonly T[] | IterableIterator<T>;
+export type StaticSeries<T> = readonly T[] | ReadonlySet<T>;
+export type SyncSeries<T> = StaticSeries<T> | IterableIterator<T>;
 export type Series<T> = MaybePromise<
     SyncSeries<MaybePromise<T>> | AsyncIterableIterator<MaybePromise<T>>
 >;

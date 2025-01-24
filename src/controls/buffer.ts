@@ -1,15 +1,18 @@
 import type { Curried } from '../compositions/curry.js';
 import { type Purried, purry } from '../compositions/purry.js';
-import type { Series } from './types.js';
+import type { Series, StaticSeries } from './types.js';
 
 const isNotEmptyElement = (): true => true;
 
-type AwaitedIterator<T> = Exclude<Awaited<Series<T>>, readonly unknown[]>;
+const isArrayOrSet = <T>(
+    awaited: Awaited<Series<T>>,
+): awaited is Extract<Awaited<Series<T>>, StaticSeries<unknown>> =>
+    Array.isArray(awaited) || awaited instanceof Set;
+
+type AwaitedIterator<T> = Exclude<Awaited<Series<T>>, StaticSeries<unknown>>;
 const toAwaitedIterator = async <T>(input: Series<T>): Promise<AwaitedIterator<T>> => {
     const awaited = await input;
-    return (Array.isArray as (v: unknown) => v is readonly unknown[])(awaited)
-        ? awaited.values()
-        : awaited;
+    return isArrayOrSet(awaited) ? awaited.values() : awaited;
 };
 
 interface Worker<T> {
