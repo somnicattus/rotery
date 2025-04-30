@@ -28,9 +28,24 @@
     "sideEffects": false,
     "type": "module",
     "exports": {
-        "import": "./dist/esm/index.js",
-        "require": "./dist/cjs/index.js",
-        "default": "./dist/esm/index.js"
+        ".": {
+            "import": "./dist/esm/index.js",
+            "require": "./dist/cjs/index.js",
+            "default": "./dist/esm/index.js",
+            "types": "./dist/index.d.ts"
+        },
+        "./sync": {
+            "import": "./dist/esm/sync.js",
+            "require": "./dist/cjs/sync.js",
+            "default": "./dist/esm/sync.js",
+            "types": "./dist/sync.d.ts"
+        },
+        "./async": {
+            "import": "./dist/esm/async.js",
+            "require": "./dist/cjs/async.js",
+            "default": "./dist/esm/async.js",
+            "types": "./dist/async.d.ts"
+        }
     },
     "main": "dist/cjs/index.js",
     "module": "dist/esm/index.js",
