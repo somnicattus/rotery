@@ -28,30 +28,33 @@ async function _asyncSome<T>(
     return false;
 }
 
+export function someSync<T>(
+    ...args: Parameters<typeof _syncSome<T>>
+): ReturnType<typeof _syncSome<T>>;
+export function someSync<T>(
+    ...args: Parameters<Curried<typeof _syncSome<T>>>
+): ReturnType<Curried<typeof _syncSome<T>>>;
+export function someSync<T>(
+    ...args: Parameters<Purried<typeof _syncSome<T>>>
+): ReturnType<Purried<typeof _syncSome<T>>> {
+    return purry(_syncSome<T>)(...args);
+}
+
+export function someAsync<T>(
+    ...args: Parameters<typeof _asyncSome<T>>
+): ReturnType<typeof _asyncSome<T>>;
+export function someAsync<T>(
+    ...args: Parameters<Curried<typeof _asyncSome<T>>>
+): ReturnType<Curried<typeof _asyncSome<T>>>;
+
+export function someAsync<T>(
+    ...args: Parameters<Purried<typeof _asyncSome<T>>>
+): ReturnType<Purried<typeof _asyncSome<T>>> {
+    return purry(_asyncSome<T>)(...args);
+}
+
 /** Determines whether at least one elements satisfy the specified test. */
 export namespace some {
-    export function sync<T>(
-        ...args: Parameters<typeof _syncSome<T>>
-    ): ReturnType<typeof _syncSome<T>>;
-    export function sync<T>(
-        ...args: Parameters<Curried<typeof _syncSome<T>>>
-    ): ReturnType<Curried<typeof _syncSome<T>>>;
-    export function sync<T>(
-        ...args: Parameters<Purried<typeof _syncSome<T>>>
-    ): ReturnType<Purried<typeof _syncSome<T>>> {
-        return purry(_syncSome<T>)(...args);
-    }
-
-    export function async<T>(
-        ...args: Parameters<typeof _asyncSome<T>>
-    ): ReturnType<typeof _asyncSome<T>>;
-    export function async<T>(
-        ...args: Parameters<Curried<typeof _asyncSome<T>>>
-    ): ReturnType<Curried<typeof _asyncSome<T>>>;
-
-    export function async<T>(
-        ...args: Parameters<Purried<typeof _asyncSome<T>>>
-    ): ReturnType<Purried<typeof _asyncSome<T>>> {
-        return purry(_asyncSome<T>)(...args);
-    }
+    export const sync = someSync;
+    export const async = someAsync;
 }

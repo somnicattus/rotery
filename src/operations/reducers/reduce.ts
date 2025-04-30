@@ -35,30 +35,33 @@ async function _asyncReduce<T, R, I>(
     return returnValue;
 }
 
+export function reduceSync<T, R, I>(
+    ...args: Parameters<typeof _syncReduce<T, R, I>>
+): ReturnType<typeof _syncReduce<T, R, I>>;
+export function reduceSync<T, R, I>(
+    ...args: Parameters<Curried<typeof _syncReduce<T, R, I>>>
+): ReturnType<Curried<typeof _syncReduce<T, R, I>>>;
+export function reduceSync<T, R, I>(
+    ...args: Parameters<Purried<typeof _syncReduce<T, R, I>>>
+): ReturnType<Purried<typeof _syncReduce<T, R, I>>> {
+    return purry(_syncReduce<T, R, I>)(...args);
+}
+
+export function reduceAsync<T, R, I>(
+    ...args: Parameters<typeof _asyncReduce<T, R, I>>
+): ReturnType<typeof _asyncReduce<T, R, I>>;
+export function reduceAsync<T, R, I>(
+    ...args: Parameters<Curried<typeof _asyncReduce<T, R, I>>>
+): ReturnType<Curried<typeof _asyncReduce<T, R, I>>>;
+
+export function reduceAsync<T, R, I>(
+    ...args: Parameters<Purried<typeof _asyncReduce<T, R, I>>>
+): ReturnType<Purried<typeof _asyncReduce<T, R, I>>> {
+    return purry(_asyncReduce<T, R, I>)(...args);
+}
+
 /** Reduce elements into one accumulated value by the specified reducer.  */
 export namespace reduce {
-    export function sync<T, R, I>(
-        ...args: Parameters<typeof _syncReduce<T, R, I>>
-    ): ReturnType<typeof _syncReduce<T, R, I>>;
-    export function sync<T, R, I>(
-        ...args: Parameters<Curried<typeof _syncReduce<T, R, I>>>
-    ): ReturnType<Curried<typeof _syncReduce<T, R, I>>>;
-    export function sync<T, R, I>(
-        ...args: Parameters<Purried<typeof _syncReduce<T, R, I>>>
-    ): ReturnType<Purried<typeof _syncReduce<T, R, I>>> {
-        return purry(_syncReduce<T, R, I>)(...args);
-    }
-
-    export function async<T, R, I>(
-        ...args: Parameters<typeof _asyncReduce<T, R, I>>
-    ): ReturnType<typeof _asyncReduce<T, R, I>>;
-    export function async<T, R, I>(
-        ...args: Parameters<Curried<typeof _asyncReduce<T, R, I>>>
-    ): ReturnType<Curried<typeof _asyncReduce<T, R, I>>>;
-
-    export function async<T, R, I>(
-        ...args: Parameters<Purried<typeof _asyncReduce<T, R, I>>>
-    ): ReturnType<Purried<typeof _asyncReduce<T, R, I>>> {
-        return purry(_asyncReduce<T, R, I>)(...args);
-    }
+    export const sync = reduceSync;
+    export const async = reduceAsync;
 }

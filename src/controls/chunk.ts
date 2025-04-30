@@ -46,29 +46,32 @@ async function* _asyncChunk<T, L extends number>(
     if (accumulator.length > 0) yield accumulator as Chunked<Awaited<T>, L>;
 }
 
+export function chunkSync<T, L extends number>(
+    ...args: Parameters<typeof _syncChunk<T, L>>
+): ReturnType<typeof _syncChunk<T, L>>;
+export function chunkSync<T, L extends number>(
+    ...args: Parameters<Curried<typeof _syncChunk<T, L>>>
+): ReturnType<Curried<typeof _syncChunk<T, L>>>;
+export function chunkSync<T, L extends number>(
+    ...args: Parameters<Purried<typeof _syncChunk<T, L>>>
+): ReturnType<Purried<typeof _syncChunk<T, L>>> {
+    return purry(_syncChunk<T, L>)(...args);
+}
+
+export function chunkAsync<T, L extends number>(
+    ...args: Parameters<typeof _asyncChunk<T, L>>
+): ReturnType<typeof _asyncChunk<T, L>>;
+export function chunkAsync<T, L extends number>(
+    ...args: Parameters<Curried<typeof _asyncChunk<T, L>>>
+): ReturnType<Curried<typeof _asyncChunk<T, L>>>;
+export function chunkAsync<T, L extends number>(
+    ...args: Parameters<Purried<typeof _asyncChunk<T, L>>>
+): ReturnType<Purried<typeof _asyncChunk<T, L>>> {
+    return purry(_asyncChunk<T, L>)(...args);
+}
+
 /** Chunks a series into a series of chunks. Each chunk has a length equal to `size`, except the last chunk. */
 export namespace chunk {
-    export function sync<T, L extends number>(
-        ...args: Parameters<typeof _syncChunk<T, L>>
-    ): ReturnType<typeof _syncChunk<T, L>>;
-    export function sync<T, L extends number>(
-        ...args: Parameters<Curried<typeof _syncChunk<T, L>>>
-    ): ReturnType<Curried<typeof _syncChunk<T, L>>>;
-    export function sync<T, L extends number>(
-        ...args: Parameters<Purried<typeof _syncChunk<T, L>>>
-    ): ReturnType<Purried<typeof _syncChunk<T, L>>> {
-        return purry(_syncChunk<T, L>)(...args);
-    }
-
-    export function async<T, L extends number>(
-        ...args: Parameters<typeof _asyncChunk<T, L>>
-    ): ReturnType<typeof _asyncChunk<T, L>>;
-    export function async<T, L extends number>(
-        ...args: Parameters<Curried<typeof _asyncChunk<T, L>>>
-    ): ReturnType<Curried<typeof _asyncChunk<T, L>>>;
-    export function async<T, L extends number>(
-        ...args: Parameters<Purried<typeof _asyncChunk<T, L>>>
-    ): ReturnType<Purried<typeof _asyncChunk<T, L>>> {
-        return purry(_asyncChunk<T, L>)(...args);
-    }
+    export const sync = chunkSync;
+    export const async = chunkAsync;
 }

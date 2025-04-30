@@ -36,29 +36,32 @@ async function* _asyncDrop<T>(input: Series<T>, drop: number): AsyncGenerator<T>
     }
 }
 
+export function dropSync<T>(
+    ...args: Parameters<typeof _syncDrop<T>>
+): ReturnType<typeof _syncDrop<T>>;
+export function dropSync<T>(
+    ...args: Parameters<Curried<typeof _syncDrop<T>>>
+): ReturnType<Curried<typeof _syncDrop<T>>>;
+export function dropSync<T>(
+    ...args: Parameters<Purried<typeof _syncDrop<T>>>
+): ReturnType<Purried<typeof _syncDrop<T>>> {
+    return purry(_syncDrop<T>)(...args);
+}
+
+export function dropAsync<T>(
+    ...args: Parameters<typeof _asyncDrop<T>>
+): ReturnType<typeof _asyncDrop<T>>;
+export function dropAsync<T>(
+    ...args: Parameters<Curried<typeof _asyncDrop<T>>>
+): ReturnType<Curried<typeof _asyncDrop<T>>>;
+export function dropAsync<T>(
+    ...args: Parameters<Purried<typeof _asyncDrop<T>>>
+): ReturnType<Purried<typeof _asyncDrop<T>>> {
+    return purry(_asyncDrop<T>)(...args);
+}
+
 /** Drops the first n elements. */
 export namespace drop {
-    export function sync<T>(
-        ...args: Parameters<typeof _syncDrop<T>>
-    ): ReturnType<typeof _syncDrop<T>>;
-    export function sync<T>(
-        ...args: Parameters<Curried<typeof _syncDrop<T>>>
-    ): ReturnType<Curried<typeof _syncDrop<T>>>;
-    export function sync<T>(
-        ...args: Parameters<Purried<typeof _syncDrop<T>>>
-    ): ReturnType<Purried<typeof _syncDrop<T>>> {
-        return purry(_syncDrop<T>)(...args);
-    }
-
-    export function async<T>(
-        ...args: Parameters<typeof _asyncDrop<T>>
-    ): ReturnType<typeof _asyncDrop<T>>;
-    export function async<T>(
-        ...args: Parameters<Curried<typeof _asyncDrop<T>>>
-    ): ReturnType<Curried<typeof _asyncDrop<T>>>;
-    export function async<T>(
-        ...args: Parameters<Purried<typeof _asyncDrop<T>>>
-    ): ReturnType<Purried<typeof _asyncDrop<T>>> {
-        return purry(_asyncDrop<T>)(...args);
-    }
+    export const sync = dropSync;
+    export const async = dropAsync;
 }
