@@ -25,30 +25,33 @@ async function _asyncForEach<T>(
     }
 }
 
+export function forEachSync<T>(
+    ...args: Parameters<typeof _syncForEach<T>>
+): ReturnType<typeof _syncForEach<T>>;
+export function forEachSync<T>(
+    ...args: Parameters<Curried<typeof _syncForEach<T>>>
+): ReturnType<Curried<typeof _syncForEach<T>>>;
+export function forEachSync<T>(
+    ...args: Parameters<Purried<typeof _syncForEach<T>>>
+): ReturnType<Purried<typeof _syncForEach<T>>> {
+    return purry(_syncForEach<T>)(...args);
+}
+
+export function forEachAsync<T>(
+    ...args: Parameters<typeof _asyncForEach<T>>
+): ReturnType<typeof _asyncForEach<T>>;
+export function forEachAsync<T>(
+    ...args: Parameters<Curried<typeof _asyncForEach<T>>>
+): ReturnType<Curried<typeof _asyncForEach<T>>>;
+
+export function forEachAsync<T>(
+    ...args: Parameters<Purried<typeof _asyncForEach<T>>>
+): ReturnType<Purried<typeof _asyncForEach<T>>> {
+    return purry(_asyncForEach<T>)(...args);
+}
+
 /** Performs the specified action for each element.  */
 export namespace forEach {
-    export function sync<T>(
-        ...args: Parameters<typeof _syncForEach<T>>
-    ): ReturnType<typeof _syncForEach<T>>;
-    export function sync<T>(
-        ...args: Parameters<Curried<typeof _syncForEach<T>>>
-    ): ReturnType<Curried<typeof _syncForEach<T>>>;
-    export function sync<T>(
-        ...args: Parameters<Purried<typeof _syncForEach<T>>>
-    ): ReturnType<Purried<typeof _syncForEach<T>>> {
-        return purry(_syncForEach<T>)(...args);
-    }
-
-    export function async<T>(
-        ...args: Parameters<typeof _asyncForEach<T>>
-    ): ReturnType<typeof _asyncForEach<T>>;
-    export function async<T>(
-        ...args: Parameters<Curried<typeof _asyncForEach<T>>>
-    ): ReturnType<Curried<typeof _asyncForEach<T>>>;
-
-    export function async<T>(
-        ...args: Parameters<Purried<typeof _asyncForEach<T>>>
-    ): ReturnType<Purried<typeof _asyncForEach<T>>> {
-        return purry(_asyncForEach<T>)(...args);
-    }
+    export const sync = forEachSync;
+    export const async = forEachAsync;
 }

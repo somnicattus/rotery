@@ -28,30 +28,33 @@ async function* _asyncPeek<T>(
     }
 }
 
+export function peekSync<T>(
+    ...args: Parameters<typeof _syncPeek<T>>
+): ReturnType<typeof _syncPeek<T>>;
+export function peekSync<T>(
+    ...args: Parameters<Curried<typeof _syncPeek<T>>>
+): ReturnType<Curried<typeof _syncPeek<T>>>;
+export function peekSync<T>(
+    ...args: Parameters<Purried<typeof _syncPeek<T>>>
+): ReturnType<Purried<typeof _syncPeek<T>>> {
+    return purry(_syncPeek<T>)(...args);
+}
+
+export function peekAsync<T>(
+    ...args: Parameters<typeof _asyncPeek<T>>
+): ReturnType<typeof _asyncPeek<T>>;
+export function peekAsync<T>(
+    ...args: Parameters<Curried<typeof _asyncPeek<T>>>
+): ReturnType<Curried<typeof _asyncPeek<T>>>;
+
+export function peekAsync<T>(
+    ...args: Parameters<Purried<typeof _asyncPeek<T>>>
+): ReturnType<Purried<typeof _asyncPeek<T>>> {
+    return purry(_asyncPeek<T>)(...args);
+}
+
 /** Performs the specified action for each element and passes it through.  */
 export namespace peek {
-    export function sync<T>(
-        ...args: Parameters<typeof _syncPeek<T>>
-    ): ReturnType<typeof _syncPeek<T>>;
-    export function sync<T>(
-        ...args: Parameters<Curried<typeof _syncPeek<T>>>
-    ): ReturnType<Curried<typeof _syncPeek<T>>>;
-    export function sync<T>(
-        ...args: Parameters<Purried<typeof _syncPeek<T>>>
-    ): ReturnType<Purried<typeof _syncPeek<T>>> {
-        return purry(_syncPeek<T>)(...args);
-    }
-
-    export function async<T>(
-        ...args: Parameters<typeof _asyncPeek<T>>
-    ): ReturnType<typeof _asyncPeek<T>>;
-    export function async<T>(
-        ...args: Parameters<Curried<typeof _asyncPeek<T>>>
-    ): ReturnType<Curried<typeof _asyncPeek<T>>>;
-
-    export function async<T>(
-        ...args: Parameters<Purried<typeof _asyncPeek<T>>>
-    ): ReturnType<Purried<typeof _asyncPeek<T>>> {
-        return purry(_asyncPeek<T>)(...args);
-    }
+    export const sync = peekSync;
+    export const async = peekAsync;
 }

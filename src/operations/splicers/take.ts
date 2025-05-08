@@ -36,29 +36,32 @@ async function* _asyncTake<T>(input: Series<T>, take: number): AsyncGenerator<T>
     }
 }
 
+export function takeSync<T>(
+    ...args: Parameters<typeof _syncTake<T>>
+): ReturnType<typeof _syncTake<T>>;
+export function takeSync<T>(
+    ...args: Parameters<Curried<typeof _syncTake<T>>>
+): ReturnType<Curried<typeof _syncTake<T>>>;
+export function takeSync<T>(
+    ...args: Parameters<Purried<typeof _syncTake<T>>>
+): ReturnType<Purried<typeof _syncTake<T>>> {
+    return purry(_syncTake<T>)(...args);
+}
+
+export function takeAsync<T>(
+    ...args: Parameters<typeof _asyncTake<T>>
+): ReturnType<typeof _asyncTake<T>>;
+export function takeAsync<T>(
+    ...args: Parameters<Curried<typeof _asyncTake<T>>>
+): ReturnType<Curried<typeof _asyncTake<T>>>;
+export function takeAsync<T>(
+    ...args: Parameters<Purried<typeof _asyncTake<T>>>
+): ReturnType<Purried<typeof _asyncTake<T>>> {
+    return purry(_asyncTake<T>)(...args);
+}
+
 /** Takes the first n elements. */
 export namespace take {
-    export function sync<T>(
-        ...args: Parameters<typeof _syncTake<T>>
-    ): ReturnType<typeof _syncTake<T>>;
-    export function sync<T>(
-        ...args: Parameters<Curried<typeof _syncTake<T>>>
-    ): ReturnType<Curried<typeof _syncTake<T>>>;
-    export function sync<T>(
-        ...args: Parameters<Purried<typeof _syncTake<T>>>
-    ): ReturnType<Purried<typeof _syncTake<T>>> {
-        return purry(_syncTake<T>)(...args);
-    }
-
-    export function async<T>(
-        ...args: Parameters<typeof _asyncTake<T>>
-    ): ReturnType<typeof _asyncTake<T>>;
-    export function async<T>(
-        ...args: Parameters<Curried<typeof _asyncTake<T>>>
-    ): ReturnType<Curried<typeof _asyncTake<T>>>;
-    export function async<T>(
-        ...args: Parameters<Purried<typeof _asyncTake<T>>>
-    ): ReturnType<Purried<typeof _asyncTake<T>>> {
-        return purry(_asyncTake<T>)(...args);
-    }
+    export const sync = takeSync;
+    export const async = takeAsync;
 }

@@ -48,29 +48,32 @@ async function* _asyncFlatMap<I, O>(
     }
 }
 
+export function flatMapSync<I, O>(
+    ...args: Parameters<typeof _syncFlatMap<I, O>>
+): ReturnType<typeof _syncFlatMap<I, O>>;
+export function flatMapSync<I, O>(
+    ...args: Parameters<Curried<typeof _syncFlatMap<I, O>>>
+): ReturnType<Curried<typeof _syncFlatMap<I, O>>>;
+export function flatMapSync<I, O>(
+    ...args: Parameters<Purried<typeof _syncFlatMap<I, O>>>
+): ReturnType<Purried<typeof _syncFlatMap<I, O>>> {
+    return purry(_syncFlatMap<I, O>)(...args);
+}
+
+export function flatMapAsync<I, O>(
+    ...args: Parameters<typeof _asyncFlatMap<I, O>>
+): ReturnType<typeof _asyncFlatMap<I, O>>;
+export function flatMapAsync<I, O>(
+    ...args: Parameters<Curried<typeof _asyncFlatMap<I, O>>>
+): ReturnType<Curried<typeof _asyncFlatMap<I, O>>>;
+export function flatMapAsync<I, O>(
+    ...args: Parameters<Purried<typeof _asyncFlatMap<I, O>>>
+): ReturnType<Purried<typeof _asyncFlatMap<I, O>>> {
+    return purry(_asyncFlatMap<I, O>)(...args);
+}
+
 /** Identical to a map followed by flatten. */
 export namespace flatMap {
-    export function sync<I, O>(
-        ...args: Parameters<typeof _syncFlatMap<I, O>>
-    ): ReturnType<typeof _syncFlatMap<I, O>>;
-    export function sync<I, O>(
-        ...args: Parameters<Curried<typeof _syncFlatMap<I, O>>>
-    ): ReturnType<Curried<typeof _syncFlatMap<I, O>>>;
-    export function sync<I, O>(
-        ...args: Parameters<Purried<typeof _syncFlatMap<I, O>>>
-    ): ReturnType<Purried<typeof _syncFlatMap<I, O>>> {
-        return purry(_syncFlatMap<I, O>)(...args);
-    }
-
-    export function async<I, O>(
-        ...args: Parameters<typeof _asyncFlatMap<I, O>>
-    ): ReturnType<typeof _asyncFlatMap<I, O>>;
-    export function async<I, O>(
-        ...args: Parameters<Curried<typeof _asyncFlatMap<I, O>>>
-    ): ReturnType<Curried<typeof _asyncFlatMap<I, O>>>;
-    export function async<I, O>(
-        ...args: Parameters<Purried<typeof _asyncFlatMap<I, O>>>
-    ): ReturnType<Purried<typeof _asyncFlatMap<I, O>>> {
-        return purry(_asyncFlatMap<I, O>)(...args);
-    }
+    export const sync = flatMapSync;
+    export const async = flatMapAsync;
 }
