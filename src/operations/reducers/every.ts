@@ -31,32 +31,35 @@ async function _asyncEvery<T>(
     return true;
 }
 
+export function everySync<T, S extends T>(
+    input: SyncSeries<T>,
+    test: (value: T) => value is S,
+): input is SyncSeries<S>;
+export function everySync<T, S extends T>(
+    test: (value: T) => value is S,
+): (input: SyncSeries<T>) => input is SyncSeries<S>;
+export function everySync<T>(input: SyncSeries<T>, test: (value: T) => boolean): boolean;
+export function everySync<T>(test: (value: T) => boolean): (input: SyncSeries<T>) => boolean;
+export function everySync<T, S extends T>(
+    ...args: Parameters<Purried<typeof _syncEvery<T, S>>>
+): ReturnType<Purried<typeof _syncEvery<T, S>>> {
+    return purry(_syncEvery<T, S>)(...args);
+}
+
+export function everyAsync<T>(
+    ...args: Parameters<typeof _asyncEvery<T>>
+): ReturnType<typeof _asyncEvery<T>>;
+export function everyAsync<T>(
+    ...args: Parameters<Curried<typeof _asyncEvery<T>>>
+): ReturnType<Curried<typeof _asyncEvery<T>>>;
+export function everyAsync<T>(
+    ...args: Parameters<Purried<typeof _asyncEvery<T>>>
+): ReturnType<Purried<typeof _asyncEvery<T>>> {
+    return purry(_asyncEvery<T>)(...args);
+}
+
 /** Determines whether every element satisfies the specified test. */
 export namespace every {
-    export function sync<T, S extends T>(
-        input: SyncSeries<T>,
-        test: (value: T) => value is S,
-    ): input is SyncSeries<S>;
-    export function sync<T, S extends T>(
-        test: (value: T) => value is S,
-    ): (input: SyncSeries<T>) => input is SyncSeries<S>;
-    export function sync<T>(input: SyncSeries<T>, test: (value: T) => boolean): boolean;
-    export function sync<T>(test: (value: T) => boolean): (input: SyncSeries<T>) => boolean;
-    export function sync<T, S extends T>(
-        ...args: Parameters<Purried<typeof _syncEvery<T, S>>>
-    ): ReturnType<Purried<typeof _syncEvery<T, S>>> {
-        return purry(_syncEvery<T, S>)(...args);
-    }
-
-    export function async<T>(
-        ...args: Parameters<typeof _asyncEvery<T>>
-    ): ReturnType<typeof _asyncEvery<T>>;
-    export function async<T>(
-        ...args: Parameters<Curried<typeof _asyncEvery<T>>>
-    ): ReturnType<Curried<typeof _asyncEvery<T>>>;
-    export function async<T>(
-        ...args: Parameters<Purried<typeof _asyncEvery<T>>>
-    ): ReturnType<Purried<typeof _asyncEvery<T>>> {
-        return purry(_asyncEvery<T>)(...args);
-    }
+    export const sync = everySync;
+    export const async = everyAsync;
 }
