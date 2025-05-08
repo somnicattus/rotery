@@ -25,13 +25,13 @@ import { dataAccess } from './some-asynchronous-data-access.js';
 const result = await Rt.pipe(
     userIds,
     // Process each unit of 100 ids in parallel.
-    Rt.chunk.sync(100),
-    Rt.map.async(async ids => await dataAccess.findUsersByIds(ids)),
-    Rt.flatten.async,
-    Rt.filter.async(user => user.age >= 20),
+    Rt.chunkSync(100),
+    Rt.mapAsync(async ids => await dataAccess.findUsersByIds(ids)),
+    Rt.flattenAsync,
+    Rt.filterAsync(user => user.age >= 20),
     // Find first 10 matched items, then abort rest iterative process.
-    Rt.take.async(10),
-    Rt.accumulate.async,
+    Rt.takeAsync(10),
+    Rt.accumulateAsync,
 );
 ```
 
@@ -59,12 +59,12 @@ By default, the results are generated asynchronously in the order of completion,
 ```ts
 const responses = await Rt.pipe(
     urls,
-    Rt.map.sync(async url => {
+    Rt.mapSync(async url => {
         const response = await fetch(url);
         return await response.json();
     }),
     Rt.concurrency({ size: 5 }), // This maintains up to 5 concurrent HTTP fetch requests.
-    Rt.accumulate.async, // The results are ordered by the completion time.
+    Rt.accumulateAsync, // The results are ordered by the completion time.
 );
 ```
 
@@ -79,8 +79,8 @@ import * as Rt from 'rotery';
 
 const findDataFromDb = Transform.from(
     Rt.compose(
-        Rt.map.async(async id => await db.find(id)),
-        Rt.filter.async(data => data.value >= 20),
+        Rt.mapAsync(async id => await db.find(id)),
+        Rt.filterAsync(data => data.value >= 20),
     ),
 );
 
