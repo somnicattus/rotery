@@ -9,13 +9,14 @@ const build = await Promise.all([
     $`bun run build:types:esm`.quiet(),
     $`bun run build:types:cjs`.quiet(),
 ]);
-const text = build
-    .map(b => b.text())
-    .filter(Boolean)
-    .join('\n');
-if (text) console.log(text);
 if (build.some(b => b.exitCode !== 0)) {
     console.error('Build failed.');
+    console.error(
+        build
+            .map(b => b.text())
+            .filter(Boolean)
+            .join('\n'),
+    );
     process.exit(1);
 }
 console.log('Build completed successfully.');
@@ -24,6 +25,7 @@ const copyPackageJson = await $`cp package.cjs.json dist/cjs/package.json`;
 
 if (copyPackageJson.exitCode !== 0) {
     console.error('Failed to copy package.cjs.json to dist/cjs/package.json.');
+    console.error(copyPackageJson.text());
     process.exit(1);
 }
 console.log('Copied package.cjs.json to dist/cjs/package.json.');
