@@ -65,7 +65,15 @@ export function chunkAsync<T, L extends number>(
     return purry(_asyncChunk<T, L>)(...args);
 }
 
-/** Chunks a series into a series of chunks. Each chunk has a length equal to `size`, except the last chunk. */
+/**
+ * Chunks a series into a series of chunks.
+ * Each chunk has a length equal to `size`, except the last chunk.
+ *
+ * Minimal chunk size is 1. If `size` is less than 1, it will be treated as 1.
+ *
+ * If the size is decimal, it will be rounded up to the nearest integer.
+ *
+ */
 export namespace chunk {
     export const sync = chunkSync;
     export const async = chunkAsync;
