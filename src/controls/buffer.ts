@@ -35,10 +35,11 @@ const constructWorkFunction =
         return { k, result };
     };
 
-const constructWorker = async <T>(input: Series<T>, size: number, mode: 'frfo' | 'fifo') => {
-    const work = constructWorkFunction(await toAwaitedIterator(input));
-    const workers = Array.from({ length: size }, async (_, k) => await work(k));
-
+const constructNextFunction = <T>(
+    mode: 'frfo' | 'fifo',
+    work: (k: number) => Promise<Worker<T>>,
+    workers: Array<Promise<Worker<T>>>,
+): (() => Promise<IteratorResult<T>>) => {
     let fifoIndex = 0;
     const next =
         mode === 'fifo'
@@ -47,7 +48,7 @@ const constructWorker = async <T>(input: Series<T>, size: number, mode: 'frfo' |
                   const { k, result } = await workers[fifoIndex]!;
                   if (result.done === true) delete workers[k];
                   else workers.splice(k, 1, work(k));
-                  fifoIndex = (fifoIndex + 1) % size;
+                  fifoIndex = (fifoIndex + 1) % workers.length;
                   return result;
               }
             : async () => {
@@ -56,6 +57,13 @@ const constructWorker = async <T>(input: Series<T>, size: number, mode: 'frfo' |
                   else workers.splice(k, 1, work(k));
                   return result;
               };
+    return next;
+};
+
+const constructWorker = async <T>(input: Series<T>, size: number, mode: 'frfo' | 'fifo') => {
+    const work = constructWorkFunction(await toAwaitedIterator(input));
+    const workers = Array.from({ length: size }, async (_, k) => await work(k));
+    const next = constructNextFunction(mode, work, workers);
 
     return {
         next,
