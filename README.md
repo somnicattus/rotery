@@ -8,6 +8,8 @@ A utility library for iterative processes, with asynchronous support, type safet
 npm i rotery
 yarn add rotery
 pnpm add rotery
+bun add rotery
+deno install npm:rotery
 ```
 
 Then in .js or .ts
