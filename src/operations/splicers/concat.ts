@@ -1,38 +1,15 @@
 import type { Curried } from '../../compositions/curry.js';
 import { type Purried, purry } from '../../compositions/purry.js';
-import { _isIterable } from '../../controls/_guards.js';
 import type { Series, SyncSeries } from '../../controls/types.js';
 
 function* _syncConcat<T>(preceding: SyncSeries<T>, following: SyncSeries<T>): Generator<T> {
-    for (const value of preceding) {
-        yield value;
-    }
-    for (const value of following) {
-        yield value;
-    }
+    yield* preceding;
+    yield* following;
 }
 
 async function* _asyncConcat<T>(preceding: Series<T>, following: Series<T>): AsyncGenerator<T> {
-    const awaitedPreceding = await preceding;
-    if (_isIterable(awaitedPreceding)) {
-        for (const value of awaitedPreceding) {
-            yield value;
-        }
-    } else {
-        for await (const value of awaitedPreceding) {
-            yield value;
-        }
-    }
-    const awaitedFollowing = await following;
-    if (_isIterable(awaitedFollowing)) {
-        for (const value of awaitedFollowing) {
-            yield value;
-        }
-    } else {
-        for await (const value of awaitedFollowing) {
-            yield value;
-        }
-    }
+    yield* await preceding;
+    yield* await following;
 }
 
 export function concatSync<T>(

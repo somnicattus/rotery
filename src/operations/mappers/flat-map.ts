@@ -8,9 +8,7 @@ function* _syncFlatMap<I, O>(
     mapper: (value: I) => SyncSeries<O>,
 ): Generator<O> {
     for (const value of input) {
-        for (const output of mapper(value)) {
-            yield output;
-        }
+        yield* mapper(value);
     }
 }
 
@@ -21,29 +19,11 @@ async function* _asyncFlatMap<I, O>(
     const awaited = await input;
     if (_isIterable(awaited)) {
         for (const value of awaited) {
-            const results = await mapper(await value);
-            if (_isIterable(results)) {
-                for (const output of results) {
-                    yield output;
-                }
-            } else {
-                for await (const output of results) {
-                    yield output;
-                }
-            }
+            yield* await mapper(await value);
         }
     } else {
         for await (const value of awaited) {
-            const results = await mapper(value);
-            if (_isIterable(results)) {
-                for (const output of results) {
-                    yield output;
-                }
-            } else {
-                for await (const output of results) {
-                    yield output;
-                }
-            }
+            yield* await mapper(value);
         }
     }
 }

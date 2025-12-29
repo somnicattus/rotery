@@ -1,4 +1,3 @@
-import { _isIterable } from './_guards.js';
 import type { Series, SyncSeries } from './types.js';
 
 export function serializeSync<T>(input: SyncSeries<T>): IterableIterator<T> {
@@ -6,12 +5,7 @@ export function serializeSync<T>(input: SyncSeries<T>): IterableIterator<T> {
 }
 
 export async function* serializeAsync<T>(input: Series<T>): AsyncGenerator<Awaited<T>> {
-    const awaited = await input;
-    if (_isIterable(awaited)) {
-        for (const value of awaited) yield value;
-    } else {
-        for await (const value of awaited) yield value;
-    }
+    yield* await input;
 }
 
 /** Serializes a series into an iterator. */
