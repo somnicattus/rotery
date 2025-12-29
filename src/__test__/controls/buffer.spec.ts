@@ -15,16 +15,15 @@ describe('buffer', () => {
     describe('input types', () => {
         const values = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
         const expectation = values;
-        it.each(testAsyncValues(values))(
-            'should buffer $type into async iterator.',
-            async ({ data }) => {
-                const result = buffer(data, { size: 3 });
-                expect(result[Symbol.asyncIterator]).toBeTypeOf('function');
-                expect(R.sortBy(await accumulate.async(result), R.identity())).toStrictEqual(
-                    expectation,
-                );
-            },
-        );
+        it.each(testAsyncValues(values))('should buffer $type into async iterator.', async ({
+            data,
+        }) => {
+            const result = buffer(data, { size: 3 });
+            expect(result[Symbol.asyncIterator]).toBeTypeOf('function');
+            expect(R.sortBy(await accumulate.async(result), R.identity())).toStrictEqual(
+                expectation,
+            );
+        });
     });
 
     describe('generation order', () => {
@@ -71,17 +70,18 @@ describe('buffer', () => {
     });
 
     describe('validation', () => {
-        it.each(([-1, 1.5, Infinity, NaN] as number[]).map(size => ({ size })))(
-            'should throw RangeError if the size is not positive integer (size: $size)',
-            async ({ size }) => {
-                let error: unknown = null;
-                try {
-                    await accumulate.async(buffer([1, 2, 3], { size }));
-                } catch (err) {
-                    error = err;
-                }
-                expect(error).toBeInstanceOf(RangeError);
-            },
-        );
+        it.each(
+            ([-1, 1.5, Infinity, NaN] as number[]).map(size => ({ size })),
+        )('should throw RangeError if the size is not positive integer (size: $size)', async ({
+            size,
+        }) => {
+            let error: unknown = null;
+            try {
+                await accumulate.async(buffer([1, 2, 3], { size }));
+            } catch (err) {
+                error = err;
+            }
+            expect(error).toBeInstanceOf(RangeError);
+        });
     });
 });

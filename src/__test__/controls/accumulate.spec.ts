@@ -1,5 +1,6 @@
 import { accumulate } from '../../index.js';
 import { testAsyncValues, testSyncValues } from '../test-util.js';
+
 const values = [1, 2, 3];
 const expectation = values;
 describe('accumulate', () => {
@@ -11,13 +12,12 @@ describe('accumulate', () => {
     });
 
     describe('async', () => {
-        it.each(testAsyncValues(values))(
-            'should accumulate $type into promise of array.',
-            async ({ data }) => {
-                const result = accumulate.async(data);
-                expect(result).toBeInstanceOf(Promise);
-                expect(await result).toStrictEqual(expectation);
-            },
-        );
+        it.each(testAsyncValues(values))('should accumulate $type into promise of array.', async ({
+            data,
+        }) => {
+            const result = accumulate.async(data);
+            expect(result).toBeInstanceOf(Promise);
+            expect(await result).toStrictEqual(expectation);
+        });
     });
 });

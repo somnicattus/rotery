@@ -1,5 +1,6 @@
 import { awaitAll, unique } from '../../../index.js';
 import { testAsyncValues, testSyncValues } from '../../test-util.js';
+
 const values = [1, 2, 3, 1, 4, 1, 2];
 const expectation = [1, 2, 3, 4];
 describe('unique', () => {
@@ -14,15 +15,14 @@ describe('unique', () => {
     });
 
     describe('async', () => {
-        it.each(testAsyncValues(values))(
-            'should create a unique series from $type.',
-            async ({ data }) => {
-                const result = unique.async(data);
+        it.each(testAsyncValues(values))('should create a unique series from $type.', async ({
+            data,
+        }) => {
+            const result = unique.async(data);
 
-                expect(result.next.bind(result)).toBeTypeOf('function');
-                expect(result[Symbol.asyncIterator]).toBeTypeOf('function');
-                expect(await awaitAll(result)).toStrictEqual(expectation);
-            },
-        );
+            expect(result.next.bind(result)).toBeTypeOf('function');
+            expect(result[Symbol.asyncIterator]).toBeTypeOf('function');
+            expect(await awaitAll(result)).toStrictEqual(expectation);
+        });
     });
 });

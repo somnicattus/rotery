@@ -3,17 +3,16 @@ import { type Curried, curry } from './curry.js';
 export type Purried<
     F extends (...args: Parameters<F>) => ReturnType<F>,
     P extends Parameters<F> | Parameters<Curried<F>> = Parameters<F> | Parameters<Curried<F>>,
-> =
     // Disallow rest parameters and optional parameters
-    Parameters<F> & Parameters<Curried<F>> extends never
-        ? // Disallow no parameters
-          Parameters<F> extends [unknown, unknown, ...unknown[]]
-            ? // Generic types
-              P extends Parameters<F>
-                ? F
-                : Curried<F>
-            : never
-        : never;
+> = Parameters<F> & Parameters<Curried<F>> extends never
+    ? // Disallow no parameters
+      Parameters<F> extends [unknown, unknown, ...unknown[]]
+        ? // Generic types
+          P extends Parameters<F>
+            ? F
+            : Curried<F>
+        : never
+    : never;
 
 /**
  * Curries a function by one level deep and overloads the original function.

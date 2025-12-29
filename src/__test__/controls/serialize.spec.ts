@@ -1,5 +1,6 @@
 import { awaitAll, serialize } from '../../index.js';
 import { testAsyncValues, testSyncValues } from '../test-util.js';
+
 const values = [1, 2, 3];
 const expectation = values;
 describe('serialize', () => {
@@ -14,15 +15,14 @@ describe('serialize', () => {
     });
 
     describe('async', () => {
-        it.each(testAsyncValues(values))(
-            'should serialize $type into async iterator.',
-            async ({ data }) => {
-                const result = serialize.async(data);
+        it.each(testAsyncValues(values))('should serialize $type into async iterator.', async ({
+            data,
+        }) => {
+            const result = serialize.async(data);
 
-                expect(result.next.bind(result)).toBeTypeOf('function');
-                expect(result[Symbol.asyncIterator]).toBeTypeOf('function');
-                expect(await awaitAll(result)).toStrictEqual(expectation);
-            },
-        );
+            expect(result.next.bind(result)).toBeTypeOf('function');
+            expect(result[Symbol.asyncIterator]).toBeTypeOf('function');
+            expect(await awaitAll(result)).toStrictEqual(expectation);
+        });
     });
 });
