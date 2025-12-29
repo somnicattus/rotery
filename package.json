@@ -44,53 +44,22 @@
         "node": ">=10.24.1"
     },
     "scripts": {
-        "dev": "tsx src/index.ts",
-        "dev:watch": "tsx watch src/index.ts",
-        "start": "node dist",
-        "build": "pnpm run clean && pnpm run \"/build:.*/\" && cp package.cjs.json dist/cjs/package.json",
-        "build:esm": "tsc --project tsconfig.esm.json",
-        "build:cjs": "tsc --project tsconfig.cjs.json",
-        "build:types:esm": "tsc --project tsconfig.types.esm.json",
-        "build:types:cjs": "tsc --project tsconfig.types.cjs.json",
-        "clean": "rm -r dist | true",
-        "test": "vitest run",
-        "test:watch": "vitest watch",
-        "bench": "vitest bench --run",
-        "bench:watch": "vitest bench --watch",
-        "lint": "prettier --write . && eslint --fix .",
-        "lint:check": "prettier --check . && eslint .",
-        "prepare": "husky"
+        "build": "bun build.ts",
+        "build:esm": "bun tsc --project tsconfig.build.json --outDir dist/esm --module es6",
+        "build:cjs": "bun tsc --project tsconfig.build.json --outDir dist/cjs --module CommonJS",
+        "build:types:esm": "bun tsc --project tsconfig.types.json --outDir dist/esm",
+        "build:types:cjs": "bun tsc --project tsconfig.types.json --outDir dist/cjs",
+        "lint": "biome check --write"
     },
     "devDependencies": {
+        "@biomejs/biome": "^2.3.10",
         "@tsconfig/strictest": "^2.0.5",
-        "@types/eslint-config-prettier": "^6.11.3",
-        "@types/node": "^22.10.10",
-        "@vitest/coverage-v8": "^3.0.4",
-        "@vitest/eslint-plugin": "^1.1.25",
-        "@vitest/ui": "^3.0.4",
-        "eslint": "^9.18.0",
-        "eslint-config-love": "^117.0.0",
-        "eslint-config-prettier": "^10.0.1",
-        "eslint-plugin-simple-import-sort": "^12.1.1",
-        "eslint-plugin-sonarjs": "^3.0.1",
-        "eslint-plugin-unicorn": "^56.0.1",
-        "eslint-plugin-unused-imports": "^4.1.4",
-        "husky": "^9.1.7",
-        "lint-staged": "^15.4.2",
-        "prettier": "^3.4.2",
+        "@types/bun": "^1.3.5",
+        "lefthook": "^2.0.13",
         "remeda": "^2.20.0",
-        "tsx": "^4.19.2",
         "typescript": "^5.7.3",
-        "typescript-eslint": "^8.21.0",
-        "vitest": "^3.0.4"
+        "vitest": "^4.0.16"
     },
-    "volta": {
-        "node": "22.13.1"
-    },
-    "packageManager": "pnpm@10.0.0",
-    "pnpm": {
-        "executionEnv": {
-            "nodeVersion": "22.13.1"
-        }
-    }
+    "trustedDependencies": [],
+    "packageManager": "bun@1.3.5"
 }

@@ -1,4 +1,0 @@
-{
-    "!((pre-commit|*ignore))": "prettier --write",
-    "!(*.(json|yaml|yml|md))": "eslint --fix"
-}

@@ -1,7 +1,10 @@
 {
     "extends": "./tsconfig.json",
     "compilerOptions": {
-        "noEmit": false
+        "noEmit": false,
+        "sourceMap": true,
+        "removeComments": true,
+        "moduleResolution": "node10"
     },
     "include": ["src"],
     "exclude": ["**/*.spec.ts", "**/*.bench.ts", "src/__test__/**/*"]

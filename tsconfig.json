@@ -1,13 +1,13 @@
 /* Visit https://aka.ms/tsconfig to read more about this file */
 {
-    "extends": ["@tsconfig/strictest/tsconfig.json"],
+    "extends": "@tsconfig/strictest",
     "compilerOptions": {
         /* Language and Environment */
 
         // async generators and for-await-of loops have been available since:
         "target": "ES2018",
         "lib": ["ES2018"],
-        "types": ["vitest/globals"],
+        "types": ["vitest/globals", "node"],
 
         /* Modules */
         "module": "NodeNext",
@@ -16,5 +16,5 @@
         /* Emit */
         "noEmit": true
     },
-    "include": ["src", "./*.config.ts", "./*.config.js", ".husky/install.mjs"]
+    "include": ["src", "./*.config.ts", "./*.config.js"]
 }

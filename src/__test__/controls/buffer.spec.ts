@@ -60,7 +60,13 @@ describe('buffer', () => {
 
             const result = buffer(input, { size: 10 });
 
-            await expect(async () => await accumulate.async(result)).rejects.toBeInstanceOf(Error);
+            let error: unknown = null;
+            try {
+                await accumulate.async(result);
+            } catch (err) {
+                error = err;
+            }
+            expect(error).toBeInstanceOf(Error);
         });
     });
 
@@ -68,9 +74,13 @@ describe('buffer', () => {
         it.each(([-1, 1.5, Infinity, NaN] as number[]).map(size => ({ size })))(
             'should throw RangeError if the size is not positive integer (size: $size)',
             async ({ size }) => {
-                await expect(
-                    async () => await accumulate.async(buffer([1, 2, 3], { size })),
-                ).rejects.toThrow(RangeError);
+                let error: unknown = null;
+                try {
+                    await accumulate.async(buffer([1, 2, 3], { size }));
+                } catch (err) {
+                    error = err;
+                }
+                expect(error).toBeInstanceOf(RangeError);
             },
         );
     });

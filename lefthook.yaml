@@ -1,0 +1,13 @@
+pre-push:
+  jobs:
+    - name: packages audit
+      run: bun audit
+
+pre-commit:
+  jobs:
+    - name: format and lint
+      run: bun biome check --write {staged_files}
+    - name: test
+      run: bun test --concurrent
+    - name: typecheck
+      run: bun tsc --noEmit
