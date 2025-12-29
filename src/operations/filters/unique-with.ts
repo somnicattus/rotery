@@ -10,6 +10,7 @@ const _syncUniqueWith = <T>(
 ): Generator<T> => {
     const array: T[] = [];
     return filterSync(input, value1 =>
+        // biome-ignore lint/complexity/noCommaOperator: comma operator for side effect
         array.some(value2 => equals(value1, value2)) ? false : (array.push(value1), true),
     );
 };
@@ -21,7 +22,8 @@ const _asyncUniqueWith = <T>(
     return filterAsync(input, async value1 =>
         (await someAsync(array, async value2 => await equals(value1, value2)))
             ? false
-            : (array.push(value1), true),
+            : // biome-ignore lint/complexity/noCommaOperator: comma operator for side effect
+              (array.push(value1), true),
     );
 };
 

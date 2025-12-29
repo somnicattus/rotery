@@ -26,18 +26,15 @@ const constructWorkFunction =
         // HACK: ignoring return results
         const result =
             next instanceof Promise
-                ? // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion -- TReturn is not considered
-                  ((await next) as IteratorResult<Awaited<T>>)
+                ? ((await next) as IteratorResult<Awaited<T>>)
                 : ({
-                      // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion -- TReturn is not considered
                       value: (await next.value) as Awaited<T>,
-                      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- undefined is not considered
+                      // biome-ignore lint/style/noNonNullAssertion: this result is for internal use and no strict optional property check needed
                       done: next.done!,
                   } as const);
         return { k, result };
     };
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type -- Return type is defined by the actual values
 const constructWorker = async <T>(input: Series<T>, size: number, mode: 'frfo' | 'fifo') => {
     const work = constructWorkFunction(await toAwaitedIterator(input));
     const workers = Array.from({ length: size }, async (_, k) => await work(k));
@@ -46,21 +43,16 @@ const constructWorker = async <T>(input: Series<T>, size: number, mode: 'frfo' |
     const next =
         mode === 'fifo'
             ? async () => {
-                  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- `fifoIndex` always indicates an existing element in fifo mode.
+                  // biome-ignore lint/style/noNonNullAssertion: we know it's not undefined because isActive is true
                   const { k, result } = await workers[fifoIndex]!;
-                  // eslint-disable-next-line @typescript-eslint/no-array-delete, @typescript-eslint/no-dynamic-delete -- HACK: empty elements mean no more workers
                   if (result.done === true) delete workers[k];
-                  // eslint-disable-next-line @typescript-eslint/no-floating-promises -- workers contain promises
                   else workers.splice(k, 1, work(k));
                   fifoIndex = (fifoIndex + 1) % size;
                   return result;
               }
             : async () => {
-                  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- HACK: empty elements is not evaluated as true
                   const { k, result } = await Promise.race(workers.filter(isNotEmptyElement));
-                  // eslint-disable-next-line @typescript-eslint/no-array-delete, @typescript-eslint/no-dynamic-delete -- HACK: empty elements mean no more workers
                   if (result.done === true) delete workers[k];
-                  // eslint-disable-next-line @typescript-eslint/no-floating-promises -- workers contain promises
                   else workers.splice(k, 1, work(k));
                   return result;
               };
@@ -68,7 +60,6 @@ const constructWorker = async <T>(input: Series<T>, size: number, mode: 'frfo' |
     return {
         next,
         get isActive() {
-            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- HACK: empty elements is not evaluated as true
             return workers.some(isNotEmptyElement);
         },
     } as const;

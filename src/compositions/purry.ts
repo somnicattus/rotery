@@ -54,7 +54,6 @@ export function purry<F extends (...args: never[]) => ReturnType<F>>(
 ): Purried<F> extends never
     ? never
     : <P extends Parameters<Purried<F>>>(...args: P) => ReturnType<Purried<F, P>> {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion -- purry cannot be safely typed
     return ((...args: never[]) =>
         fn.length === args.length ? fn(...args) : curry(fn)(...args)) as Purried<F> extends never
         ? never

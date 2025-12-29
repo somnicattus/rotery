@@ -51,11 +51,9 @@ export function curry<F extends (...args: readonly never[]) => unknown, N extend
     fn: F,
     nth?: N,
 ): NthCurried<N, F> {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion -- currying cannot be safely typed
     const curried = ((...args: readonly never[]) =>
         (a0: never) =>
             fn(a0, ...args)) as Curried<F>;
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion -- multiple currying cannot be safely typed
     return (nth === undefined || nth <= 1 ? curried : curry(curried, nth - 1)) as NthCurried<N, F>;
 }
