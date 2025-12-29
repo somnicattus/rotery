@@ -1,6 +1,6 @@
 import type { Curried } from '../compositions/curry.js';
 import { type Purried, purry } from '../compositions/purry.js';
-import type { Series, StaticSeries } from './types.js';
+import type { MaybePromise, Series, StaticSeries } from './types.js';
 
 const isNotEmptyElement = (): true => true;
 
@@ -9,7 +9,9 @@ const isArrayOrSet = <T>(
 ): awaited is Extract<Awaited<Series<T>>, StaticSeries<unknown>> =>
     Array.isArray(awaited) || awaited instanceof Set;
 
-type AwaitedIterator<T> = Exclude<Awaited<Series<T>>, StaticSeries<unknown>>;
+type AwaitedIterator<T> =
+    | IterableIterator<MaybePromise<T>>
+    | AsyncIterableIterator<MaybePromise<T>>;
 const toAwaitedIterator = async <T>(input: Series<T>): Promise<AwaitedIterator<T>> => {
     const awaited = await input;
     return isArrayOrSet(awaited) ? awaited.values() : awaited;
