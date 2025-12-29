@@ -11,6 +11,10 @@ export const testAsyncValues = <T>(values: T[]) =>
     [
         ...testSyncValues(values),
         { type: 'promise of iterator', data: Promise.resolve(serialize.sync(values)) },
+        {
+            type: 'iterator of promise',
+            data: serialize.sync(values.map(async x => await Promise.resolve(x))),
+        },
         { type: 'promise of array', data: Promise.resolve(values) },
         { type: 'array of promise', data: values.map(async x => await Promise.resolve(x)) },
         { type: 'promise of set', data: Promise.resolve(new Set(values)) },
