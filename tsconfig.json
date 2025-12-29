@@ -16,5 +16,5 @@
         /* Emit */
         "noEmit": true
     },
-    "include": ["src", "./*.config.ts", "./*.config.js"]
+    "include": ["src", "tests", "./*.ts"]
 }

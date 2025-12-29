@@ -37,8 +37,7 @@
     "jsnext:main": "dist/esm/index.js",
     "files": [
         "dist/*",
-        "src/*",
-        "!**/__test__"
+        "src/*"
     ],
     "engines": {
         "node": ">=10.24.1"
