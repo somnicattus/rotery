@@ -24,7 +24,7 @@ async function* _asyncTakeWhile<T, S extends Awaited<T>>(
             if (!(await test(await value))) {
                 break;
             }
-            yield value;
+            yield await value;
         }
     } else {
         for await (const value of awaited) {
