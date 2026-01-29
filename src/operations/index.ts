@@ -19,3 +19,4 @@ export * from './side-effectors/peek.js';
 export * from './splicers/concat.js';
 export * from './splicers/drop.js';
 export * from './splicers/take.js';
+export * from './splicers/take-while.js';
