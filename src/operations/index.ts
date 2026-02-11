@@ -18,4 +18,5 @@ export * from './side-effectors/for-each.js';
 export * from './side-effectors/peek.js';
 export * from './splicers/concat.js';
 export * from './splicers/drop.js';
+export * from './splicers/drop-while.js';
 export * from './splicers/take.js';
